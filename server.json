@@ -1,0 +1,80 @@
+{
+  "foods": [
+    {
+      "id": 1,
+      "name": "Ao molho",
+      "description": "Macarrão ao molho branco, fughi e cheiro verde das montanhas.",
+      "price": "19.90",
+      "available": true,
+      "image": "https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-food/food1.png"
+    },
+    {
+      "image": "https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-food/food2.png",
+      "name": "Veggie",
+      "price": "21.10",
+      "description": "Macarrão com pimentão, ervilha e ervas finas colhidas no himalaia.",
+      "id": 2,
+      "available": true
+    },
+    {
+      "id": 3,
+      "name": "A la Camarón",
+      "image": "https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-food/food3.png",
+      "price": "25.90",
+      "description": "Macarrão com vegetais de primeira linha e camarão dos 7 mares.",
+      "available": false
+    },
+    {
+      "id": 4,
+      "name": "La Pizza",
+      "description": "Macarrão com vegetais de primeira linha e camarão dos 7 mares.",
+      "price": "25.90",
+      "available": false,
+      "image": "https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-food/food3.png"
+    },
+    {
+      "id": 5,
+      "name": "La Pastel",
+      "description": "Macarrão com vegetais de primeira linha e camarão dos 7 mares.",
+      "price": "25.90",
+      "available": false,
+      "image": "https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-food/food3.png"
+    },
+    {
+      "image": "fsdf",
+      "name": "fsdf",
+      "price": "fdsf",
+      "description": "dfsdf",
+      "id": 6
+    },
+    {
+      "image": "sfsdf",
+      "name": "fsdfsd",
+      "price": "dfsdfs",
+      "description": "dfsdfs",
+      "id": 7
+    },
+    {
+      "image": "a",
+      "name": "d",
+      "price": "d",
+      "description": "d",
+      "id": 8
+    },
+    {
+      "image": "dfs",
+      "name": "fds",
+      "price": "fdfsdf",
+      "description": "ddsfsdf",
+      "id": 9
+    },
+    {
+      "id": 10,
+      "name": "sss",
+      "image": "dfs",
+      "description": "shhhhh",
+      "price": "fdff",
+      "available": true
+    }
+  ]
+}
