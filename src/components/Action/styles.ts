@@ -1,10 +1,10 @@
 import styled, { css } from 'styled-components';
 
-interface IFoodPlateProps {
+interface IActionPlateProps {
   available: boolean;
 }
 
-export const Container = styled.div<IFoodPlateProps>`
+export const Container = styled.div<IActionPlateProps>`
   background: #f0f0f5;
   border-radius: 8px;
   

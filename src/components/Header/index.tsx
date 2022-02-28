@@ -5,7 +5,7 @@ import Button from '../Button';
 import NewActionModal from '../NewActionModal';
 
 
-interface IFoodPlate {
+interface IAction {
   id: number;
   name: string;
   description: string;
@@ -14,30 +14,30 @@ interface IFoodPlate {
 
 const Header: React.FC = () => {
  
-  const [foods, setFoods] = useState<IFoodPlate[]>([]);
+  const [actions, setActions] = useState<IAction[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
-    async function loadFoods(): Promise<void> {
-      const response = await api.get<IFoodPlate[]>('action');
+    async function loadactions(): Promise<void> {
+      const response = await api.get<IAction[]>('action');
 
-      setFoods(response.data);
+      setActions(response.data);
     }
-    loadFoods();
+    loadactions();
   }, []);
 
-  async function handleAddFood(
-    food: Omit<IFoodPlate, 'id' | 'available'>,
+  async function handleAddAction(
+    action: Omit<IAction, 'id' | 'available'>,
   ): Promise<void> {
     try {
-      const newFood: IFoodPlate = {
-        id: foods[foods.length - 1] ? foods[foods.length - 1].id + 1 : 1,
-        name: food.name,
-        description: food.description,
+      const newAction: IAction = {
+        id: actions[actions.length - 1] ? actions[actions.length - 1].id + 1 : 1,
+        name: action.name,
+        description: action.description,
         available: true,
       };
-      await api.post('/action', newFood);
-      setFoods([...foods, newFood]);
+      await api.post('/action', newAction);
+      setActions([...actions, newAction]);
     } catch (err) {
       // eslint-disable-next-line no-console
       console.log(err);
@@ -64,9 +64,10 @@ const Header: React.FC = () => {
             <Button openModal={toggleModal} />
           </div>
           <NewActionModal
-          isOpen={modalOpen}
-          setIsOpen={toggleModal}
-          handleAddFood={handleAddFood}
+            isOpen={modalOpen}
+            setIsOpen={toggleModal}
+            handleAddAction={handleAddAction}
+          
         />
         </div>
       </header>

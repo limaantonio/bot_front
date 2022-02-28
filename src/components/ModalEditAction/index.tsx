@@ -4,7 +4,7 @@ import Input from '../Input';
 import Modal from '../Modal';
 import { Form } from './styles';
 
-interface IFoodPlate {
+interface IAction {
   _id: number;
   name: string;
   description: string;
@@ -16,11 +16,11 @@ interface IFoodPlate {
 interface IModalProps {
   isOpen: boolean;
   setIsOpen: () => void;
-  handleUpdateFood: (food: Omit<IFoodPlate, 'id' | 'available'>) => void;
-  editingFood: IFoodPlate;
+  handleUpdateAction: (Action: Omit<IAction, 'id' | 'available'>) => void;
+  editingAction: IAction;
 }
 
-interface IEditFoodData {
+interface IActionData {
   _id: number;
   name: string;
   description: string;
@@ -28,25 +28,25 @@ interface IEditFoodData {
   numberDays: number;
 }
 
-const ModalEditFood: React.FC<IModalProps> = ({
+const ModalEditAction: React.FC<IModalProps> = ({
   isOpen,
   setIsOpen,
-  editingFood,
-  handleUpdateFood,
+  editingAction,
+  handleUpdateAction,
 }) => {
   const formRef = useRef<FormHandles>(null);
 
   const handleSubmit = useCallback(
-    async (data: IEditFoodData) => {
-      await handleUpdateFood(data);
+    async (data: IActionData) => {
+      await handleUpdateAction(data);
       setIsOpen();
     },
-    [handleUpdateFood, setIsOpen],
+    [handleUpdateAction, setIsOpen],
   );
 
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
-      <Form className="space-y-4 mb-14 p-2 space-y-2 flex flex-col " ref={formRef} onSubmit={handleSubmit} initialData={editingFood}>
+      <Form className="space-y-4 mb-14 p-2 space-y-2 flex flex-col " ref={formRef} onSubmit={handleSubmit} initialData={editingAction}>
       <h1 className="text-xl mb-4 font-bold">Editar Configurar Ação Programável</h1>
 
       <div className="flex flex-col">
@@ -71,7 +71,7 @@ const ModalEditFood: React.FC<IModalProps> = ({
       </div>
 
         <button className=" bg-blue-500 hover:bg-blue-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 p-2 rounded-md text-white w-36 absolute right-7 bottom-4"
-          type="submit" data-testid="edit-food-button">
+          type="submit" data-testid="edit-Action-button">
           <div className="text">Editar Prato</div>
        </button>
       </Form>
@@ -79,4 +79,4 @@ const ModalEditFood: React.FC<IModalProps> = ({
   );
 };
 
-export default ModalEditFood;
+export default ModalEditAction;

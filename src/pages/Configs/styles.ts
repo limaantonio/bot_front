@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const FoodsContainer = styled.div`
+export const ActionsContainer = styled.div`
   
 
   margin: 0 auto;

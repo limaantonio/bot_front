@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { BsArrowLeftShort } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
-import Food from '../../components/Food';
-import ModalEditFood from '../../components/ModalEditFood';
+import Action from '../../components/Action';
+import ModalEditAction from '../../components/ModalEditAction';
 import api from '../../services/api';
 
-interface IFoodPlate {
+interface IAction {
   _id: number;
   name: string;
   description: string;
@@ -15,8 +15,8 @@ interface IFoodPlate {
 }
 
 const Configs: React.FC = () => {
-  const [foods, setFoods] = useState<IFoodPlate[]>([]);
-  const [editingFood, setEditingFood] = useState<IFoodPlate>(
+  const [actions, setActions] = useState<IAction[]>([]);
+  const [editingAction, setEditingAction] = useState<IAction>(
     {
       _id: 0,
       name: '',
@@ -28,47 +28,48 @@ const Configs: React.FC = () => {
   const [editModalOpen, setEditModalOpen] = useState(false);
 
   useEffect(() => {
-    async function loadFoods(): Promise<void> {
-      const response = await api.get<IFoodPlate[]>('action');
+    async function loadActions(): Promise<void> {
+      const response = await api.get<IAction[]>('action');
 
-      setFoods(response.data);
+      setActions(response.data);
     }
-    loadFoods();
+    
+    loadActions();
   }, []);
 
-  async function handleUpdateFood(
-    food: Omit<IFoodPlate, 'id' | 'available'>,
+  async function handleUpdateAction(
+    action: Omit<IAction, 'id' | 'available'>,
   ): Promise<void> {
-    const newFoodList = foods.map(cfood => {
-      if (cfood._id !== editingFood._id) {
-        return cfood;
+    const newActionList = actions.map(cAction => {
+      if (cAction._id !== editingAction._id) {
+        return cAction;
       }
       return {
-        ...food,
-        id: editingFood._id,
-        available: editingFood.available,
+        ...action,
+        id: editingAction._id,
+        available: editingAction.available,
       };
     });
-    setFoods(newFoodList);
-    await api.put(`/action/${editingFood._id}`, {
-      ...food,
-      id: editingFood._id,
-      available: editingFood.available,
+    setActions(newActionList);
+    await api.put(`/action/${editingAction._id}`, {
+      ...action,
+      id: editingAction._id,
+      available: editingAction.available,
     });
   }
 
-  async function handleDeleteFood(id: number): Promise<void> {
+  async function handleDeleteAction(id: number): Promise<void> {
     await api.delete(`/action/${id}`);
-    const listFood = foods.filter(food => food._id !== id);
-    setFoods(listFood);
+    const listAction = actions.filter(Action => Action._id !== id);
+    setActions(listAction);
   }
 
   function toggleEditModal(): void {
     setEditModalOpen(!editModalOpen);
   }
 
-  function handleEditFood(food: IFoodPlate): void {
-    setEditingFood(food);
+  function handleEditAction(Action: IAction): void {
+    setEditingAction(Action);
     toggleEditModal();
   }
 
@@ -79,11 +80,11 @@ const Configs: React.FC = () => {
       <BsArrowLeftShort className="text-white w-8 h-8"/>
       </Link>
     </div>
-      <ModalEditFood
+      <ModalEditAction
         isOpen={editModalOpen}
         setIsOpen={toggleEditModal}
-        editingFood={editingFood}
-        handleUpdateFood={handleUpdateFood}
+        editingAction={editingAction}
+        handleUpdateAction={handleUpdateAction}
       />
 
 
@@ -97,16 +98,16 @@ const Configs: React.FC = () => {
         </div>
 
         <div className="overflow-scroll w-10/12">
-        <div className=" rounded-md  h-full  " data-testid="foods-list">
+        <div className=" rounded-md  h-full  " data-testid="actions-list">
       
           
-        {foods &&
-          foods.map(food => (
-            <Food
-              key={food._id}
-              food={food}
-              handleDelete={handleDeleteFood}
-              handleEditFood={handleEditFood}
+        {actions &&
+          actions.map(action => (
+            <Action
+              key={action._id}
+              action={action}
+              handleDelete={handleDeleteAction}
+              handleEditAction={handleEditAction}
             />
           ))}
       </div>

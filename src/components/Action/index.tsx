@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FiEdit3, FiTrash } from 'react-icons/fi';
 import api from '../../services/api';
 
-interface IFoodPlate {
+interface IActionPlate {
   _id: number;
   name: string;
   description: string;
@@ -12,46 +12,46 @@ interface IFoodPlate {
 }
 
 interface IProps {
-  food: IFoodPlate;
+  action: IActionPlate;
   handleDelete: (id: number) => {};
-  handleEditFood: (food: IFoodPlate) => void;
+  handleEditAction: (action: IActionPlate) => void;
 }
 
-const Food: React.FC<IProps> = ({
-  food,
+const Action: React.FC<IProps> = ({
+  action,
   handleDelete,
-  handleEditFood,
+  handleEditAction,
 }: IProps) => {
-  const [isAvailable, setIsAvailable] = useState(food.available);
+  const [isAvailable, setIsAvailable] = useState(action.available);
 
   async function toggleAvailable(): Promise<void> {
-    await api.put(`foods/${food._id}`, {
-      id: food._id,
-      name: food.name,
-      description: food.description,
-      context: food.context,
-      numberDays: food.numberDays,
+    await api.put(`action/${action._id}`, {
+      id: action._id,
+      name: action.name,
+      description: action.description,
+      context: action.context,
+      numberDays: action.numberDays,
       available: !isAvailable,
     });
     setIsAvailable(!isAvailable);
   }
 
-  function setEditingFood(): void {
-    handleEditFood(food);
+  function setEditingaction(): void {
+    handleEditAction(action);
   }
 
   return (
     <div  className="bg-white text-sm p-4 flex flex-row items-center relative border font-light h-14">
-        <h2 className="w-3/12 text-left">{food.name}</h2>
-        <p className="w-3/12 text-left">{food.description}</p>
-        <span className="w-3/12 text-center">{food.context}</span>
+        <h2 className="w-3/12 text-left">{action.name}</h2>
+        <p className="w-3/12 text-left">{action.description}</p>
+        <span className="w-3/12 text-center">{action.context}</span>
 
         <div className="w-3/12 text-center space-x-2">
           <button
             type="button"
             className="bg-gray-200 rounded-full p-2 shadow-sm hover:bg-blue-400 duration-300"
-            onClick={() => setEditingFood()}
-            data-testid={`edit-food-${food._id}`}
+            onClick={() => setEditingaction()}
+            data-testid={`edit-action-${action._id}`}
           >
             <FiEdit3 size={20} />
           </button>
@@ -59,8 +59,8 @@ const Food: React.FC<IProps> = ({
           <button
             type="button"
             className="bg-gray-200 rounded-full p-2 shadow-sm hover:bg-red-400 duration-300"
-            onClick={() => handleDelete(food._id)}
-            data-testid={`remove-food-${food._id}`}
+            onClick={() => handleDelete(action._id)}
+            data-testid={`remove-action-${action._id}`}
           >
             <FiTrash size={20} />
           </button>
@@ -71,13 +71,13 @@ const Food: React.FC<IProps> = ({
         {/* <div className="availability-container">
           <p>{isAvailable ? 'Disponível' : 'Indisponível'}</p>
 
-          <label htmlFor={`available-switch-${food.id}`} className="switch">
+          <label htmlFor={`available-switch-${action.id}`} className="switch">
             <input
-              id={`available-switch-${food.id}`}
+              id={`available-switch-${action.id}`}
               type="checkbox"
               checked={isAvailable}
               onChange={toggleAvailable}
-              data-testid={`change-status-food-${food.id}`}
+              data-testid={`change-status-action-${action.id}`}
             />
             <span className="slider" />
           </label>
@@ -87,4 +87,4 @@ const Food: React.FC<IProps> = ({
   );
 };
 
-export default Food;
+export default Action;
