@@ -1,20 +1,28 @@
 import React, { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import  {CategoryAction}  from '../../components/CategoryAction';
 import DropdownDetail from '../../components/DropdownDetail';
 import Header from '../../components/Header';
 import api from '../../services/api';
 
-interface IAction {
+interface ICategoryAction {
   id: number;
   name: string;
   description: string;
   context: string;
 }
 
+function useQuery() {
+  const { search } = useLocation();
+
+  return React.useMemo(() => new URLSearchParams(search), [search]);
+}
+
 const Dashboard: React.FC = () => {
   const [isNewTrasactionModalOpen, setIsNewTrasactionModalOpen] =
   useState(false);
 
-  const [categoryActions, setCategoryActions] = useState<IAction[]>([]);
+  const [categoryActions, setCategoryActions] = useState<ICategoryAction[]>([]);
 
   function handleOpenNewTrasactionModalOpen() {
     setIsNewTrasactionModalOpen(true);
@@ -26,30 +34,17 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     api.get('/categoryAction').then(response => {
-      setCategoryActions(response.data);
+      setCategoryActions(response.data.categoryActions);
     })
   },[]);
-
- 
 
   return (
     <>
      <Header/> 
-    <div className="flex flex-col items-center relative space-y-2 bg-gray-300 h-screen">
-      {categoryActions.map(action => {
-        <div className="relative bg-white p-6 mt-10 w-10/12 rounded-md shadow-md space-y-2">
-          <h1 className="font-bold">{action.name}</h1>
-          <p>{action.description}</p>
-          <div className="flex flex-row relative">
-              <span>#{action.context}</span>
-              <span className="absolute right-0 font-light">4 ações ativas</span>
-          </div>
-
-          <div className="absolute right-0 top-0">
-            <DropdownDetail onOpenNewTransactionModal={handleOpenNewTrasactionModalOpen}/>
-          </div>
-        </div>
-      })}
+    <div className="flex flex-col items-center relative bg space-y-2 bg-gray-300 mb-10">
+      {categoryActions.map((action) => (
+        <CategoryAction action={action}/>
+      ))}
     </div>
     </>
   );

@@ -1,41 +1,48 @@
 import React, { useEffect, useState } from 'react';
 import { BsArrowLeftShort } from 'react-icons/bs';
-import { Link } from 'react-router-dom';
+import { Link, useHistory, useLocation, useParams } from 'react-router-dom';
 import Action from '../../components/Action';
 import ModalEditAction from '../../components/ModalEditAction';
 import api from '../../services/api';
 
 interface IAction {
   _id: number;
-  name: string;
-  description: string;
-  context: string;
-  numberDays: number;
+  title: string;
+  deadline: number;
+  passing_score: number;
+  dt_complete_class: Date;
   available: boolean;
+ 
+ 
 }
 
-const Configs: React.FC = () => {
+
+
+function Configs () {
   const [actions, setActions] = useState<IAction[]>([]);
   const [editingAction, setEditingAction] = useState<IAction>(
     {
       _id: 0,
-      name: '',
-      description: '',
-      context: '',
-      numberDays: 0,
-      available: true
+      title: '',
+      deadline: 0,
+      passing_score: 0,
+      dt_complete_class: new Date(),
+      available: true,
+     
     });
   const [editModalOpen, setEditModalOpen] = useState(false);
 
-  useEffect(() => {
-    async function loadActions(): Promise<void> {
-      const response = await api.get<IAction[]>('action');
+  let { id } = useParams();
 
-      setActions(response.data);
+  useEffect(() => {
+    async function loadActions(id: any): Promise<void> {
+      const response = await api.get(`action?active=${true}&category_action_id=${id}`);
+
+      setActions(response.data.listActions);
     }
     
-    loadActions();
-  }, []);
+    loadActions(id);
+  }, [id]);
 
   async function handleUpdateAction(
     action: Omit<IAction, 'id' | 'available'>,
@@ -74,45 +81,46 @@ const Configs: React.FC = () => {
   }
 
   return (
-    <div className="bg-gray-300 flex flex-col h-screen items-center">
-    <div className="h-14 w-full bg-blue-500 p-6 items-center flex flex-row ">
-      <Link to="/" className="">
-      <BsArrowLeftShort className="text-white w-8 h-8"/>
-      </Link>
-    </div>
-      <ModalEditAction
-        isOpen={editModalOpen}
-        setIsOpen={toggleEditModal}
-        editingAction={editingAction}
-        handleUpdateAction={handleUpdateAction}
-      />
-
-
-
+   <div>
+   
+       <div className="bg-gray-300 flex flex-col h-screen items-center">
+     
+       <div className="h-14 w-full bg-blue-500 p-6 items-center flex flex-row ">
+         <Link to="/" className="">
+         <BsArrowLeftShort className="text-white w-8 h-8"/>
+         </Link>
+       </div>
+         <ModalEditAction
+           isOpen={editModalOpen}
+           setIsOpen={toggleEditModal}
+           editingAction={editingAction}
+           handleUpdateAction={handleUpdateAction}
+         />
+   
+         <div className="bg-white flex flex-row items-center w-10/12 p-4 mt-10 h-14">
+           <h2 className="w-3/12 text-center">Ação</h2>
+           <h1 className="w-3/12 text-center">Dias</h1>
+           <h1 className="w-3/12 text-center">Nota de Corte</h1>
+           <h1 className="w-3/12 text-center">Data para entrega</h1>
+         </div>
+   
+         <div className="overflow-scroll w-10/12">
+           <div className=" rounded-md  h-full  " data-testid="actions-list">
+           {actions &&
+             actions.map(action => (
+               <Action
+                 key={action._id}
+                 action={action}
+                 handleDelete={handleDeleteAction}
+                 handleEditAction={handleEditAction}
+               />
+           ))}
+           </div>
+         </div>
+       </div>
+     )
+   </div>
     
-        <div className="bg-white flex flex-row items-center w-10/12 p-4 mt-10 h-14">
-          <h2 className="w-3/12 text-center">Nome</h2>
-          <h1 className="w-3/12 text-center">Descrição</h1>
-          <h1 className="w-3/12 text-center">Contexto</h1>
-          <h1 className="w-3/12 text-center">Ações</h1>
-        </div>
-
-        <div className="overflow-scroll w-10/12">
-        <div className=" rounded-md  h-full  " data-testid="actions-list">
-      
-          
-        {actions &&
-          actions.map(action => (
-            <Action
-              key={action._id}
-              action={action}
-              handleDelete={handleDeleteAction}
-              handleEditAction={handleEditAction}
-            />
-          ))}
-      </div>
-      </div>
-    </div>
   );
 };
 

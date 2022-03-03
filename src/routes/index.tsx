@@ -6,7 +6,9 @@ import Dashboard from '../pages/Dashboard';
 const Routes: React.FC = () => (
   <Switch>
     <Route path="/" exact component={Dashboard} />
-    <Route path="/configs" exact component={Configs} />
+    <Route 
+      path={"/:id"}
+      children={<Configs/>} />
   </Switch>
 );
 

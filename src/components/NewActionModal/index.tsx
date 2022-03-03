@@ -2,8 +2,8 @@ import { FormHandles } from '@unform/core';
 import React, { useCallback, useRef, useState, ChangeEvent } from 'react';
 import Input from '../Input';
 import Modal from '../Modal';
-import { Form } from './styles';
 import api from '../../services/api';
+import { Form } from './styles';
 
 interface IAction {
   id: number;
@@ -65,9 +65,9 @@ const NewActionModal: React.FC<IModalProps> = ({
   }
 
   async function loadactions(context: string): Promise<void> {
-    const response = await api.get<IAction[]>(`categoryAction?context=${context}`);
+    const response = await api.get(`categoryAction?context=${context}`);
 
-    setActions(response.data);
+    setActions(response.data.categoryActions);
   }
  
   return (

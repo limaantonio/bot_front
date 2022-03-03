@@ -4,13 +4,14 @@ import Input from '../Input';
 import Modal from '../Modal';
 import { Form } from './styles';
 
+
 interface IAction {
   _id: number;
-  name: string;
-  description: string;
-  context: string;
-  numberDays: number;
-  available: boolean;
+  title: string;
+  deadline: number;
+  passing_score: number;
+  dt_complete_class: Date;
+  available: boolean
 }
 
 interface IModalProps {
@@ -22,10 +23,11 @@ interface IModalProps {
 
 interface IActionData {
   _id: number;
-  name: string;
-  description: string;
-  context: string;
-  numberDays: number;
+  title: string;
+  deadline: number;
+  passing_score: number;
+  dt_complete_class: Date;
+
 }
 
 const ModalEditAction: React.FC<IModalProps> = ({

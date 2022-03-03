@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { FiEdit3, FiTrash } from 'react-icons/fi';
 import api from '../../services/api';
-import { format } from "date-fns";
 
-interface IAction {
+interface ICategoryActionPlate {
   _id: number;
   title: string;
   deadline: number;
@@ -13,9 +12,9 @@ interface IAction {
 }
 
 interface IProps {
-  action: IAction;
+  action: ICategoryActionPlate;
   handleDelete: (id: number) => {};
-  handleEditAction: (action: IAction) => void;
+  handleEditAction: (action: ICategoryActionPlate) => void;
 }
 
 const Action: React.FC<IProps> = ({
@@ -43,10 +42,10 @@ const Action: React.FC<IProps> = ({
 
   return (
     <div  className="bg-white text-sm p-4 flex flex-row items-center relative border font-light h-14">
-        <span className="w-3/12 text-left">{action.title}</span>
-        <span className="w-3/12 text-left">{action.deadline}</span>
+        <h2 className="w-3/12 text-left">{action.title}</h2>
+        <p className="w-3/12 text-left">{action.deadline}</p>
         <span className="w-3/12 text-center">{action.passing_score}</span>
-        <span className="w-3/12 text-center">{format(new Date(action.dt_complete_class), "yyyy-MM-dd")}</span>
+        <span className="w-3/12 text-center">{action.dt_complete_class}</span>
 
         <div className="w-3/12 text-center space-x-2">
           <button
@@ -67,6 +66,8 @@ const Action: React.FC<IProps> = ({
             <FiTrash size={20} />
           </button>
         </div>
+        
+  
 
         {/* <div className="availability-container">
           <p>{isAvailable ? 'Disponível' : 'Indisponível'}</p>

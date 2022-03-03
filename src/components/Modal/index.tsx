@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ReactModal from 'react-modal';
 
-
 interface IActionPlate {
   id: number;
   name: string;
