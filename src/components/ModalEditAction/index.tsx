@@ -52,29 +52,29 @@ const ModalEditAction: React.FC<IModalProps> = ({
       <h1 className="text-xl mb-4 font-bold">Editar Configurar Ação Programável</h1>
 
       <div className="flex flex-col">
-        <span className="">Nome</span>
-        <Input className="p-2 rounded-sm border border-gray-200 shadow-sm font-light text-gray-600" name="name" />
+        <span className="">Ação</span>
+        <Input className="p-2 rounded-sm border border-gray-200 shadow-sm font-light text-gray-600" name="title" />
       </div>
 
       <div className="flex flex-col">
-        <span className="">Descrição</span>
-        <Input className="p-2 rounded-sm border border-gray-200 shadow-sm font-light text-gray-600" name="description" />
+        <span className="">Dias</span>
+        <Input className="p-2 rounded-sm border border-gray-200 shadow-sm font-light text-gray-600" name="deadline" />
       </div>
 
       <div className="flex flex-row space-x-2">
         <div className="flex flex-col w-1/2">
-            <span className="">Contexto</span>
-            <Input className="p-2 rounded-sm border border-gray-200 shadow-sm font-light text-gray-600" name="context" />
+            <span className="">Nota de corte</span>
+            <Input className="p-2 rounded-sm border border-gray-200 shadow-sm font-light text-gray-600" name="passing_score" />
         </div>
         <div className="flex flex-col w-1/2">
             <span className="">Quantidade de dias</span>
-            <Input className="p-2 rounded-sm border border-gray-200 shadow-sm font-light text-gray-600" name="numberDays" />
+            <Input className="p-2 rounded-sm border border-gray-200 shadow-sm font-light text-gray-600" name=" dt_complete_class" />
         </div>
       </div>
 
         <button className=" bg-blue-500 hover:bg-blue-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 p-2 rounded-md text-white w-36 absolute right-7 bottom-4"
           type="submit" data-testid="edit-Action-button">
-          <div className="text">Editar Prato</div>
+          <div className="text">Editar</div>
        </button>
       </Form>
     </Modal>

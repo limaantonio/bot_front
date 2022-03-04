@@ -86,9 +86,11 @@ function Configs () {
        <div className="bg-gray-300 flex flex-col h-screen items-center">
      
        <div className="h-14 w-full bg-blue-500 p-6 items-center flex flex-row ">
-         <Link to="/" className="">
-         <BsArrowLeftShort className="text-white w-8 h-8"/>
+         <Link to="/" className="flex flex-row items-center justify-center">
+           <BsArrowLeftShort className="text-white w-8 h-8"/>
+           <span className="text-white">Voltar</span>
          </Link>
+        
        </div>
          <ModalEditAction
            isOpen={editModalOpen}
@@ -96,26 +98,30 @@ function Configs () {
            editingAction={editingAction}
            handleUpdateAction={handleUpdateAction}
          />
-   
-         <div className="bg-white flex flex-row items-center w-10/12 p-4 mt-10 h-14">
-           <h2 className="w-3/12 text-center">Ação</h2>
-           <h1 className="w-3/12 text-center">Dias</h1>
-           <h1 className="w-3/12 text-center">Nota de Corte</h1>
-           <h1 className="w-3/12 text-center">Data para entrega</h1>
-         </div>
-   
-         <div className="overflow-scroll w-10/12">
-           <div className=" rounded-md  h-full  " data-testid="actions-list">
-           {actions &&
-             actions.map(action => (
-               <Action
-                 key={action._id}
-                 action={action}
-                 handleDelete={handleDeleteAction}
-                 handleEditAction={handleEditAction}
-               />
-           ))}
-           </div>
+         <div className="flex flex-col items-left  w-full px-12 p-6">
+            <h1 className="font-semibold items-">Suas Configurações</h1>
+
+              <div className="bg-white flex flex-row items-center p-4 mt-10 h-14">
+                <h2 className="w-3/12 text-left">Ação</h2>
+                <h1 className="w-3/12 text-left">Dias</h1>
+                <h1 className="w-3/12 text-center">Nota de Corte</h1>
+                <h1 className="w-3/12 text-center">Data para entrega</h1>
+                <h1 className="w-3/12 text-center"></h1>
+              </div>
+
+                <div className="overflow-scroll">
+                    <div className=" rounded-md  h-full  " data-testid="actions-list">
+                    {actions &&
+                      actions.map(action => (
+                        <Action
+                          key={action._id}
+                          action={action}
+                          handleDelete={handleDeleteAction}
+                          handleEditAction={handleEditAction}
+                        />
+                    ))}
+                    </div>
+              </div>
          </div>
        </div>
      )
