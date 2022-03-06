@@ -6,7 +6,7 @@ import ModalEditAction from '../../components/ModalEditAction';
 import api from '../../services/api';
 
 interface IAction {
-  _id: number;
+  id: number;
   title: string;
   deadline: number;
   passing_score: number;
@@ -22,7 +22,7 @@ function Configs () {
   const [actions, setActions] = useState<IAction[]>([]);
   const [editingAction, setEditingAction] = useState<IAction>(
     {
-      _id: 0,
+      id: 0,
       title: '',
       deadline: 0,
       passing_score: 0,
@@ -48,26 +48,26 @@ function Configs () {
     action: Omit<IAction, 'id' | 'available'>,
   ): Promise<void> {
     const newActionList = actions.map(cAction => {
-      if (cAction._id !== editingAction._id) {
+      if (cAction.id !== editingAction.id) {
         return cAction;
       }
       return {
         ...action,
-        id: editingAction._id,
+        id: editingAction.id,
         available: editingAction.available,
       };
     });
     setActions(newActionList);
-    await api.put(`/action/${editingAction._id}`, {
+    await api.put(`/action/${editingAction.id}`, {
       ...action,
-      id: editingAction._id,
+      id: editingAction.id,
       available: editingAction.available,
     });
   }
 
   async function handleDeleteAction(id: number): Promise<void> {
     await api.delete(`/action/${id}`);
-    const listAction = actions.filter(Action => Action._id !== id);
+    const listAction = actions.filter(Action => Action.id !== id);
     setActions(listAction);
   }
 
@@ -114,7 +114,7 @@ function Configs () {
                     {actions &&
                       actions.map(action => (
                         <Action
-                          key={action._id}
+                          key={action.id}
                           action={action}
                           handleDelete={handleDeleteAction}
                           handleEditAction={handleEditAction}

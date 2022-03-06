@@ -9,9 +9,10 @@ import { SelectCategoryAction } from '../SelectCategoryAction';
 import { SelectLesson } from '../SelectLesson';
 import { SelectContent } from '../SelectContent';
 import { SelectSubject } from '../SelectSubject';
+import { SelectStudent } from '../SelectStudent';
 
 interface IAction {
-  id: number;
+  id: string;
   name: string;
   description: string;
  
@@ -44,10 +45,15 @@ interface IModalProps {
 }
 
 interface ISubject {
-  id: number;
+  id: string;
   code: string;
   name: string;
   semester: string;
+}
+
+interface IStudent {
+  id: number;
+  name: string;
 }
 
 const NewActionModal: React.FC<IModalProps> = ({
@@ -64,13 +70,16 @@ const NewActionModal: React.FC<IModalProps> = ({
   const [selectTypeContent, setSelectTypeContent] = useState();
   const [selectContent, setSelectContent] = useState();
   const [selectSubject, setSelectSubject] = useState();
-
+  const [selectStudent, setSelectStudent] = useState();
   
   const [context, setContext] = useState('0');
   const [actions, setActions] = useState<IAction[]>([]);
+  const [action, setAction] = useState<IAction>();
   const [contents, setContents] = useState<IContent[]>([]);
   const [lessons, setLessons] = useState<ILesson[]>([]);
   const [subjects, setSubjects] = useState<ISubject[]>([]);
+  const [students, setStudents] = useState<IStudent[]>([]);
+  const [subjectStudent, setSubjectStudent] = useState<IStudent[]>([]);
 
   const typeContexts = [
     {id: 1, key: 'REVISAO', name: "Revisão"},
@@ -93,9 +102,27 @@ const NewActionModal: React.FC<IModalProps> = ({
   ); 
 
   function handleSelectedAction(event: ChangeEvent<HTMLSelectElement>){
-    const action = event.target.value;
+    const id = event.target.value;
+    
+    console.log(id)
+    actions.map(a => {
+     if (a.id == id && a != null) {
+      setAction(a);
+       
+     } 
+    
+    })
 
-    setSelectAction(action);
+    setSelectAction(id);
+   
+  }
+
+  function handleSelectedSubject(event: ChangeEvent<HTMLSelectElement>){
+    const subject = event.target.value;
+
+    loadLessons(subject);
+   
+    setSelectSubject(subject);
   }
 
   function handleSelectedContext(event: ChangeEvent<HTMLSelectElement>){
@@ -120,16 +147,40 @@ const NewActionModal: React.FC<IModalProps> = ({
     setSelectLesson(lesson);
   }
 
+ 
+
+  function handleSelectedStudent(event: ChangeEvent<HTMLSelectElement>){
+    const selectedStudent = event.target.value;
+
+    loadSubjectStudent(selectedStudent);
+   
+    setSelectStudent(selectedStudent);
+  }
+
   async function loadActions(context: string): Promise<void> {
     const response = await api.get(`categoryAction?context=${context}`);
 
+   
     setActions(response.data.categoryActions);
+    
   }
 
   async function loadContents(content: string): Promise<void> {
     const response = await api.get(`contents?type=${content}`);
 
     setContents(response.data);
+  }
+
+  async function loadLessons(subject: string): Promise<void> {
+    const response = await api.get(`lesson?subject$=${subject}`);
+
+    setLessons(response.data);
+  }
+
+  async function loadSubjectStudent(subject: string): Promise<void> {
+    const response = await api.get('registration');
+
+    setSubjectStudent(response.data);
   }
 
   useEffect(() => {
@@ -140,19 +191,9 @@ const NewActionModal: React.FC<IModalProps> = ({
 
    },[]);
 
-  async function loadLessons(subject: string): Promise<void> {
-    const response = await api.get(`lesson?subject$=${subject}`);
+ 
 
-    setLessons(response.data);
-  }
-
-  function handleSelectedSubject(event: ChangeEvent<HTMLSelectElement>){
-    const subject = event.target.value;
-
-    loadLessons(subject);
-   
-    setSelectSubject(subject);
-  }
+ 
 
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>    
@@ -163,19 +204,31 @@ const NewActionModal: React.FC<IModalProps> = ({
           <Select title="Bot" data={typeContexts} value={selectTypeContext} change={handleSelectedContext}/>
           <SelectCategoryAction title="Tipo" data={actions} value={selectAction} change={handleSelectedAction}/>
         </div>
+
+      
+          <div className="flex flex-col">
+            <span className="">Quantidade de dias{selectAction}</span>
+            <Input className="p-2 rounded-sm border border-gray-200 shadow-sm font-light text-gray-600" name="name" value={action?.description}/>
+          </div>
+       
+
+      
        
        <hr className="mt-6"/>
 
         <div className="flex flex-row space-x-2">
           <SelectSubject title="Selecione a materia" data={subjects} value={selectSubject} change={handleSelectedSubject}/>
           <SelectLesson title="Selecione a aula" data={lessons} value={selectLesson} change={handleSelectedLesson}/>
-          <Select title="Ação" data={typeActions} value={selectTypeContent} change={handleSelectedContent}/>
+          <SelectStudent title="Selecione o aluno" data={students} value={selectStudent} change={handleSelectedStudent}/>
          
         </div>
+
+       
 
         <hr className="mt-6"/>
 
         <div className="flex flex-row space-x-2">
+          <Select title="Ação" data={typeActions} value={selectTypeContent} change={handleSelectedContent}/>
           <SelectContent title="Conteúdo" data={contents} value={selectContent} change={handleSelectedContent}/>
           <div className="flex flex-col w-1/2">
             <span className="">Quantidade de dias</span>

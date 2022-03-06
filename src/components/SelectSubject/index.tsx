@@ -1,7 +1,7 @@
 import React, {ChangeEvent} from 'react';
 
 interface ISubject {
-  id: number;
+  id: string;
   code: string;
   name: string;
   semester: string;
@@ -31,7 +31,7 @@ function SelectSubject ({title, data, value, change}: IProps) {
               Selecione
             </option>
             {data.map((type) => (
-              <option key={type.id} value={type.name}>
+              <option key={type.id} value={type.id}>
                 {type.name}
               </option>
             ))}

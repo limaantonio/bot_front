@@ -6,7 +6,7 @@ import { Form } from './styles';
 
 
 interface IAction {
-  _id: number;
+  id: number;
   title: string;
   deadline: number;
   passing_score: number;
@@ -22,7 +22,7 @@ interface IModalProps {
 }
 
 interface IActionData {
-  _id: number;
+  id: number;
   title: string;
   deadline: number;
   passing_score: number;
