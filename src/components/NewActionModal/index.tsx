@@ -15,21 +15,18 @@ interface IAction {
   id: string;
   name: string;
   description: string;
- 
 }
 
 interface IContent {
   id: number;
   name: string;
   description: string;
- 
 }
 
 interface ILesson {
   id: number;
   title: string;
   description: string;
- 
 }
 
 interface ICreateActionData {
@@ -41,7 +38,6 @@ interface IModalProps {
   isOpen: boolean;
   setIsOpen: () => void;
   handleAddAction: (action: Omit<IAction, 'id' | 'available'>) => void;
- 
 }
 
 interface ISubject {
@@ -49,6 +45,14 @@ interface ISubject {
   code: string;
   name: string;
   semester: string;
+}
+
+interface ISubjectStudent {
+  id: string;
+  code: string;
+  name: string;
+  semester: string;
+  student: IStudent;
 }
 
 interface IStudent {
@@ -74,12 +78,15 @@ const NewActionModal: React.FC<IModalProps> = ({
   
   const [context, setContext] = useState('0');
   const [actions, setActions] = useState<IAction[]>([]);
-  const [action, setAction] = useState<IAction>();
+  
   const [contents, setContents] = useState<IContent[]>([]);
   const [lessons, setLessons] = useState<ILesson[]>([]);
   const [subjects, setSubjects] = useState<ISubject[]>([]);
   const [students, setStudents] = useState<IStudent[]>([]);
-  const [subjectStudent, setSubjectStudent] = useState<IStudent[]>([]);
+  const [subjectStudents, setSubjectStudents] = useState<ISubjectStudent[]>([]);
+
+  const [action, setAction] = useState<IAction>();
+  const [subject, setSubject] = useState<ISubject>();
 
   const typeContexts = [
     {id: 1, key: 'REVISAO', name: "Revisão"},
@@ -104,33 +111,33 @@ const NewActionModal: React.FC<IModalProps> = ({
   function handleSelectedAction(event: ChangeEvent<HTMLSelectElement>){
     const id = event.target.value;
     
-    console.log(id)
     actions.map(a => {
      if (a.id == id && a != null) {
       setAction(a);
-       
      } 
-    
-    })
-
+    });
     setSelectAction(id);
-   
   }
 
   function handleSelectedSubject(event: ChangeEvent<HTMLSelectElement>){
-    const subject = event.target.value;
+    const id = event.target.value;
 
-    loadLessons(subject);
+    loadLessons(id);
+    loadSubjectStudent(id);
+
+    subjects.map(a => {
+      if (a.id == id && a != null) {
+       setSubject(a);
+      } 
+     });
    
-    setSelectSubject(subject);
+    setSelectSubject(id);
   }
 
   function handleSelectedContext(event: ChangeEvent<HTMLSelectElement>){
     const context = event.target.value;
 
     loadActions(context);
-
-   
 
     setContext(context);
   }
@@ -147,22 +154,15 @@ const NewActionModal: React.FC<IModalProps> = ({
     setSelectLesson(lesson);
   }
 
- 
-
   function handleSelectedStudent(event: ChangeEvent<HTMLSelectElement>){
     const selectedStudent = event.target.value;
-
-    loadSubjectStudent(selectedStudent);
    
-    setSelectStudent(selectedStudent);
   }
 
   async function loadActions(context: string): Promise<void> {
     const response = await api.get(`categoryAction?context=${context}`);
 
-   
     setActions(response.data.categoryActions);
-    
   }
 
   async function loadContents(content: string): Promise<void> {
@@ -178,9 +178,10 @@ const NewActionModal: React.FC<IModalProps> = ({
   }
 
   async function loadSubjectStudent(subject: string): Promise<void> {
-    const response = await api.get('registration');
+   
+    const response = await api.get(`registration?subject=${subject}`);
 
-    setSubjectStudent(response.data);
+    setSubjectStudents(response.data);
   }
 
   useEffect(() => {
@@ -191,52 +192,54 @@ const NewActionModal: React.FC<IModalProps> = ({
 
    },[]);
 
- 
-
- 
-
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>    
       <Form className="space-y-4 mb-14 p-2 space-y-2 flex flex-col " ref={formRef} onSubmit={handleSubmit}>
         <h1 className="text-xl mb-4 font-bold">Configurar Ação Programável</h1>
 
         <div className="flex flex-row space-x-2">
-          <Select title="Bot" data={typeContexts} value={selectTypeContext} change={handleSelectedContext}/>
-          <SelectCategoryAction title="Tipo" data={actions} value={selectAction} change={handleSelectedAction}/>
+          <div className="w-3/12">
+           <Select title="Bot" data={typeContexts} value={selectTypeContext} change={handleSelectedContext}/>
+          </div>
+          <div className="w-9/12">
+            <SelectCategoryAction title="Tipo" data={actions} value={selectAction} change={handleSelectedAction}/>
+          </div>
         </div>
-
       
           <div className="flex flex-col">
-            <span className="">Quantidade de dias{selectAction}</span>
-            <Input className="p-2 rounded-sm border border-gray-200 shadow-sm font-light text-gray-600" name="name" value={action?.description}/>
+            <span className="font-medium">Descrição</span>
+            <textarea className="p-2 border rounded-lg h-16 border-gray-200 shadow-sm font-light text-gray-600
+             focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-sky-500" name="name" value={action?.description}>{}</textarea>
           </div>
-       
-
-      
-       
-       <hr className="mt-6"/>
 
         <div className="flex flex-row space-x-2">
-          <SelectSubject title="Selecione a materia" data={subjects} value={selectSubject} change={handleSelectedSubject}/>
-          <SelectLesson title="Selecione a aula" data={lessons} value={selectLesson} change={handleSelectedLesson}/>
-          <SelectStudent title="Selecione o aluno" data={students} value={selectStudent} change={handleSelectedStudent}/>
-         
+          <div className="w-4/12">
+            <SelectSubject title="Selecione a materia" data={subjects} value={selectSubject} change={handleSelectedSubject}/>  
+          </div>
+          <div className="w-4/12">
+            <SelectStudent title="Selecione o aluno" data={subjectStudents} value={selectStudent} change={handleSelectedStudent}/>
+          </div>
+          <div className="w-4/12">
+            <SelectLesson title="Selecione a aula" data={lessons} value={selectLesson} change={handleSelectedLesson}/>
+          </div>
         </div>
 
-       
-
-        <hr className="mt-6"/>
+        <div className="flex flex-col">
+            <span className="font-medium">Código da disciplina</span>
+            <Input className="p-2 border rounded-lg border-gray-200 shadow-sm font-light text-gray-600
+             focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-sky-500" name="name" value={subject?.code}/>
+          </div>
 
         <div className="flex flex-row space-x-2">
           <Select title="Ação" data={typeActions} value={selectTypeContent} change={handleSelectedContent}/>
           <SelectContent title="Conteúdo" data={contents} value={selectContent} change={handleSelectedContent}/>
           <div className="flex flex-col w-1/2">
-            <span className="">Quantidade de dias</span>
-            <Input className="p-2 rounded-sm border border-gray-200 shadow-sm font-light text-gray-600" name="name"/>
+            <span className="font-medium">Quantidade de dias</span>
+            <Input className="p-2 rounded-lg border border-gray-200 shadow-sm font-light text-gray-600
+            focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-sky-500" name="name"/>
           </div>
         </div>
         
-      
         <button 
           className=" bg-blue-500 hover:bg-blue-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 p-2 rounded-md text-white w-36 absolute right-7 bottom-4" 
           type="submit" data-testid="add-action-button">
