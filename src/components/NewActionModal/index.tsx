@@ -10,6 +10,9 @@ import { SelectLesson } from '../SelectLesson';
 import { SelectContent } from '../SelectContent';
 import { SelectSubject } from '../SelectSubject';
 import { SelectStudent } from '../SelectStudent';
+import Dropzone from '../Dropzone';
+import Upload from '../Dropzone';
+
 
 interface IAction {
   id: string;
@@ -24,7 +27,7 @@ interface IContent {
 }
 
 interface ILesson {
-  id: number;
+  id: string;
   title: string;
   description: string;
 }
@@ -87,6 +90,9 @@ const NewActionModal: React.FC<IModalProps> = ({
 
   const [action, setAction] = useState<IAction>();
   const [subject, setSubject] = useState<ISubject>();
+  const [lesson, setLesson] = useState<ILesson>();
+
+  const [selectedFile, setSelectedFile] = useState<File>();
 
   const typeContexts = [
     {id: 1, key: 'REVISAO', name: "Revisão"},
@@ -149,9 +155,17 @@ const NewActionModal: React.FC<IModalProps> = ({
   }
 
   function handleSelectedLesson(event: ChangeEvent<HTMLSelectElement>){
-    const lesson = event.target.value;
+    const id = event.target.value;
+    
+    lessons.map(a => {
+      if (a.id == id && a != null) {
+       setLesson(a);
+      } 
+     });
+
+     console.log(id)
    
-    setSelectLesson(lesson);
+    setSelectLesson(id);
   }
 
   function handleSelectedStudent(event: ChangeEvent<HTMLSelectElement>){
@@ -192,9 +206,13 @@ const NewActionModal: React.FC<IModalProps> = ({
 
    },[]);
 
+   const handleUpload = (file) => {
+    setSelectedFile(file);
+  };
+
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>    
-      <Form className="space-y-4 mb-14 p-2 space-y-2 flex flex-col " ref={formRef} onSubmit={handleSubmit}>
+      <Form className="space-y-4 mb-14 p-2 space-y-2 flex flex-col text-sm" ref={formRef} onSubmit={handleSubmit}>
         <h1 className="text-xl mb-4 font-bold">Configurar Ação Programável</h1>
 
         <div className="flex flex-row space-x-2">
@@ -225,20 +243,31 @@ const NewActionModal: React.FC<IModalProps> = ({
         </div>
 
         <div className="flex flex-col">
-            <span className="font-medium">Código da disciplina</span>
-            <Input className="p-2 border rounded-lg border-gray-200 shadow-sm font-light text-gray-600
-             focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-sky-500" name="name" value={subject?.code}/>
-          </div>
+          <span className="font-medium">Descrição da aula</span>
+          <Input className="h-9 px-2 border rounded-lg border-gray-200 shadow-sm font-light text-gray-600
+            focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-sky-500" name="name" value={lesson?.description}/>
+        </div>
 
         <div className="flex flex-row space-x-2">
-          <Select title="Ação" data={typeActions} value={selectTypeContent} change={handleSelectedContent}/>
-          <SelectContent title="Conteúdo" data={contents} value={selectContent} change={handleSelectedContent}/>
+          <div className="w-4/12">
+            <Select title="Ação" data={typeActions} value={selectTypeContent} change={handleSelectedContent}/>
+          </div>
+          {/* <div className="w-4/12">
+            <SelectContent title="Conteúdo" data={contents} value={selectContent} change={handleSelectedContent}/>
+          </div> */}
+       
+        
           <div className="flex flex-col w-1/2">
             <span className="font-medium">Quantidade de dias</span>
-            <Input className="p-2 rounded-lg border border-gray-200 shadow-sm font-light text-gray-600
+            <Input className="h-9 rounded-lg border border-gray-200 shadow-sm font-light text-gray-600
             focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-sky-500" name="name"/>
           </div>
         </div>
+
+      
+          <Upload onFileUploaded={setSelectedFile}/>
+      
+       
         
         <button 
           className=" bg-blue-500 hover:bg-blue-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 p-2 rounded-md text-white w-36 absolute right-7 bottom-4" 

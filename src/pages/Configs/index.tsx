@@ -102,7 +102,7 @@ function Configs () {
             <h1 className="font-semibold items-">Suas Configurações</h1>
 
               <div className="bg-white flex flex-row items-center p-4 mt-10 h-14">
-                <h2 className="w-3/12 text-left">Ação</h2>
+                <h2 className="w-3/12 text-left">Conteúdo</h2>
                 <h1 className="w-3/12 text-left">Dias</h1>
                 <h1 className="w-3/12 text-center">Nota de Corte</h1>
                 <h1 className="w-3/12 text-center">Data para entrega</h1>
