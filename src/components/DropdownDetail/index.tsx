@@ -2,11 +2,12 @@ import { Menu, Transition } from '@headlessui/react';
 import React, { Fragment } from 'react';
 import { AiOutlineMore } from 'react-icons/ai';
 import { BsListCheck } from 'react-icons/bs';
-import Modal from "react-modal";
+import Modal from 'react-modal';
 import { Link } from 'react-router-dom';
 
-Modal.setAppElement("#root");
+Modal.setAppElement('#root');
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
@@ -15,7 +16,11 @@ interface HeaderProps {
   onOpenNewTransactionModal: () => void;
 }
 
-export default function DropdownDetail({ onOpenNewTransactionModal }: HeaderProps) {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export default function DropdownDetail({
+  onOpenNewTransactionModal,
+}: HeaderProps) {
   return (
     <Menu as="div" className="relative inline-block text-left z-10">
       {({ open }) => (
@@ -27,7 +32,7 @@ export default function DropdownDetail({ onOpenNewTransactionModal }: HeaderProp
               font-light
              "
             >
-              <img className="w-10"  alt="" />
+              <img className="w-10" alt="" />
               <AiOutlineMore
                 className="-mr-1 hidden sm:flex ml-2 h-5 w-5 absolute right-2"
                 aria-hidden="true"
@@ -50,14 +55,14 @@ export default function DropdownDetail({ onOpenNewTransactionModal }: HeaderProp
               className="origin-top-right z-20 absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
             >
               <div className="py-1">
-               
                 <Menu.Item>
                   {({ active }) => (
                     <Link
-                    to="/configs"
-
+                      to="/configs"
                       className={classNames(
-                        active ? 'border-l-4 border-blue-600  w-full bg-gray-100 text-gray-900' : 'text-gray-700',
+                        active
+                          ? 'border-l-4 border-blue-600  w-full bg-gray-100 text-gray-900'
+                          : 'text-gray-700',
                         'block px-4 py-2 text-sm',
                       )}
                     >

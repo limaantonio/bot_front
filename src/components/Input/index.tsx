@@ -1,12 +1,13 @@
+/* eslint-disable react/require-default-props */
 import { useField } from '@unform/core';
 import React, {
-  InputHTMLAttributes, useCallback, useEffect,
+  InputHTMLAttributes,
+  useCallback,
+  useEffect,
   useRef,
-  useState
+  useState,
 } from 'react';
 import { IconBaseProps } from 'react-icons';
-
-
 
 interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
@@ -40,13 +41,13 @@ const Input: React.FC<IInputProps> = ({ name, icon: Icon, ...rest }) => {
   }, [fieldName, registerField]);
 
   return (
-        <input
-        onFocus={handleInputFocus}
-        onBlur={handleInputBlur}
-        defaultValue={defaultValue}
-        ref={inputRef}
-        {...rest}
-      />
+    <input
+      onFocus={handleInputFocus}
+      onBlur={handleInputBlur}
+      defaultValue={defaultValue}
+      ref={inputRef}
+      {...rest}
+    />
   );
 };
 
