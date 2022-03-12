@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable jsx-a11y/heading-has-content */
 /* eslint-disable react/jsx-no-comment-textnodes */
@@ -12,8 +13,8 @@ interface IAction {
   id: number;
   title: string;
   deadline: number;
-  passingScore: number;
-  dtCompleteClass: Date;
+  passing_score: number;
+  dt_complete_class: Date;
   available: boolean;
 }
 
@@ -25,8 +26,8 @@ function Configs() {
     id: 0,
     title: '',
     deadline: 0,
-    passingScore: 0,
-    dtCompleteClass: new Date(),
+    passing_score: 0,
+    dt_complete_class: new Date(),
     available: true,
   });
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -91,7 +92,7 @@ function Configs() {
   return (
     <div>
       <div className="bg-gray-300 flex flex-col h-screen items-center">
-        <div className="h-14 w-full bg-blue-500 p-6 items-center flex flex-row ">
+        <div className="h-14 w-full bg-indigo-600 p-6 items-center flex flex-row ">
           <Link to="/" className="flex flex-row items-center justify-center">
             <BsArrowLeftShort className="text-white w-8 h-8" />
             <span className="text-white">Voltar</span>
@@ -112,10 +113,7 @@ function Configs() {
             <h2 className="w-3/12 text-left">Conteúdo</h2>
             <h1 className="w-3/12 text-left">Dias</h1>
             <h1 className="w-3/12 text-center">Nota de Corte</h1>
-            // eslint-disable-next-line react/jsx-no-comment-textnodes
             <h1 className="w-3/12 text-center">Data para entrega</h1>
-            // eslint-disable-next-line jsx-a11y/heading-has-content
-            eslint-disable-next-line jsx-a11y/heading-has-content
             <h1 className="w-3/12 text-center" />
           </div>
 

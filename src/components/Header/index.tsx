@@ -1,8 +1,10 @@
 /* eslint-disable react/jsx-no-bind */
 import React, { useEffect, useState } from 'react';
 import { SiProbot } from 'react-icons/si';
+import { Link } from 'react-router-dom';
 import api from '../../services/api';
 import Button from '../Button';
+import Nav from '../Nav';
 import NewActionModal from '../NewActionModal';
 
 interface IAction {
@@ -50,24 +52,22 @@ const Header: React.FC = () => {
   }
 
   return (
-    <header className="h-44 w-full bg-blue-500 flex flex-col justify-center items-center">
-      <div className="flex flex-row items-center w-10/12 relative">
-        <div className="flex flex-row items-center space-x-4">
-          <div className="rounded-full p-4 flex flex-row items-start justify-center bg-green-400">
-            <SiProbot className="text-white w-10 h-10 " />
-          </div>
-
-          <span className="text-white font-light text-xl">Proffy Bot</span>
-        </div>
-
-        <div className="absolute right-0">
-          <Button openModal={toggleModal} />
-        </div>
+    <header
+      style={{ zIndex: 0 }}
+      className=" w-full flex flex-col items-center  "
+    >
+      <div className="flex flex-row mt-10 w-10/12 relative">
         <NewActionModal
           isOpen={modalOpen}
           setIsOpen={toggleModal}
           handleAddAction={handleAddAction}
         />
+        <div className="absolute right-0">
+          <Button openModal={toggleModal} />
+        </div>
+        <div className="flex flex-row items-center space-x-4">
+          <span className="text-black text-3xl">Proffy Bot</span>
+        </div>
       </div>
     </header>
   );

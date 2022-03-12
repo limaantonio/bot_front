@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/role-has-required-aria-props */
+/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/jsx-no-bind */
 /* eslint-disable array-callback-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
@@ -10,6 +12,7 @@ import React, {
   ChangeEvent,
   useEffect,
 } from 'react';
+import axios from 'axios';
 import Input from '../Input';
 import Modal from '../Modal';
 import api from '../../services/api';
@@ -20,6 +23,9 @@ import { SelectSubject } from '../SelectSubject';
 import { SelectStudent } from '../SelectStudent';
 import Upload from '../Upload';
 import { Form } from './styles';
+import SelectCustom from '../SelectCustom';
+import SelectCustomImg from '../SelectCustomImg';
+import SelectCustomTeacher from '../SelectCustomTeacher';
 
 interface IAction {
   id: string;
@@ -70,12 +76,29 @@ interface IStudent {
   name: string;
 }
 
+interface IChar {
+  id: number;
+  name: string;
+  image: string;
+}
+
+interface ITeacher {
+  id: number;
+  name: string;
+  email: string;
+  imgUrl: string;
+}
+
 const NewActionModal: React.FC<IModalProps> = ({
   isOpen,
   setIsOpen,
   handleAddAction,
 }) => {
   const formRef = useRef<FormHandles>(null);
+
+  const [testSubjects, setTestSubjects] = useState<ISubject[]>([]);
+  const [selectedTeacher, setSelectedTeachers] = useState<ITeacher[]>([]);
+  const [teachers, setTeachers] = useState<ITeacher[]>([]);
 
   const [selectAction, setSelectAction] = useState();
   const [selectLesson, setSelectLesson] = useState();
@@ -97,6 +120,9 @@ const NewActionModal: React.FC<IModalProps> = ({
   const [lesson, setLesson] = useState<ILesson>();
 
   const [selectedFile, setSelectedFile] = useState<File>();
+
+  const [query, setQuery] = useState('');
+  const [characters, setCharacters] = useState<IChar[]>([]);
 
   const typeContexts = [
     { id: 1, key: 'REVISAO', name: 'Revisão' },
@@ -210,13 +236,37 @@ const NewActionModal: React.FC<IModalProps> = ({
     });
   }, []);
 
+  useEffect(() => {
+    api.get('teacher').then(response => {
+      setTeachers(response.data);
+    });
+  }, []);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const { data } = await api.get(`subject=${query}`);
+  //       setCharacters(data.results);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [query]);
+
   const handleUpload = file => {
     setSelectedFile(file);
   };
 
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
-      <Form className=" text-sm" ref={formRef} onSubmit={handleSubmit}>
+      <Form
+        style={{ zIndex: 2 }}
+        className=" text-sm"
+        ref={formRef}
+        onSubmit={handleSubmit}
+      >
         <h1 className="text-xl mb-4 font-bold">Configurar Ação Programável</h1>
         <div className="flex flex-row space-x-4">
           {/* Lado esquerdo */}
@@ -249,17 +299,55 @@ const NewActionModal: React.FC<IModalProps> = ({
                 {}
               </textarea>
             </div>
+
+            {/* <div className="search">
+              <input
+                type="text"
+                placeholder="Search Character"
+                className="input"
+                onChange={event => setQuery(event.target.value)}
+                value={query}
+              />
+            </div>
+            <div className="results">
+              {characters.map(character => (
+                <div>
+                  <img src={character.image} alt={character.name} />
+                  {character.name}
+                </div>
+              ))}
+            </div> */}
+
+            {/* <SelectCustomImg
+              seletedValue={selected}
+              setSelectedValue={setSelected}
+              data={people}
+              title="Professor"
+            /> */}
+
+            {/* <SelectCustom
+              seletedValue={testSubjects}
+              setSelectedValue={setTestSubjects}
+              data={subjects}
+              title="Disciplina"
+            /> */}
           </div>
           {/* Lado direito */}
           <div className="w-1/2 space-y-2">
-            <div className="">
-              <SelectSubject
-                title="Selecione a materia"
-                data={subjects}
-                value={selectSubject}
-                change={handleSelectedSubject}
-              />
-            </div>
+            <SelectCustomTeacher
+              seletedValue={selectedTeacher}
+              setSelectedValue={setSelectedTeachers}
+              data={teachers}
+              title="Professor"
+            />
+
+            <SelectSubject
+              title="Disciplinas/Turma"
+              data={subjects}
+              value={selectSubject}
+              change={handleSelectedSubject}
+            />
+
             <div className="flex flex-row space-x-2">
               <div className="w-6/12">
                 <SelectStudent
@@ -301,14 +389,18 @@ const NewActionModal: React.FC<IModalProps> = ({
               <SelectContent title="Conteúdo" data={contents} value={selectContent} change={handleSelectedContent}/>
             </div> */}
 
-            <div className="flex flex-col">
-              <span className="font-medium">Quantidade de dias</span>
-              <Input
-                className="h-9 p-2 rounded-lg border border-gray-200 shadow-sm font-light text-gray-600
+            {context === 'REVISAO' ? (
+              <div className="flex flex-col">
+                <span className="font-medium">Quantidade de dias</span>
+                <Input
+                  className="h-9 p-2 rounded-lg border border-gray-200 shadow-sm font-light text-gray-600
               focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-sky-500"
-                name="name"
-              />
-            </div>
+                  name="name"
+                />
+              </div>
+            ) : (
+              <></>
+            )}
 
             <Upload onFileUploaded={setSelectedFile} />
           </div>

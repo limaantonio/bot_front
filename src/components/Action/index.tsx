@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable @typescript-eslint/ban-types */
 import React, { useState } from 'react';
 import { FiEdit3, FiTrash } from 'react-icons/fi';
@@ -8,8 +9,8 @@ interface IAction {
   id: number;
   title: string;
   deadline: number;
-  passingScore: number;
-  dtCompleteClass: Date;
+  passing_score: number;
+  dt_complete_class: Date;
   available: boolean;
 }
 
@@ -31,8 +32,8 @@ const Action: React.FC<IProps> = ({
       id: action.id,
       title: action.title,
       deadline: action.deadline,
-      passingScore: action.passingScore,
-      dtCompleteClass: action.dtCompleteClass,
+      passingScore: action.passing_score,
+      dtCompleteClass: action.dt_complete_class,
       available: !isAvailable,
     });
     setIsAvailable(!isAvailable);
@@ -46,9 +47,9 @@ const Action: React.FC<IProps> = ({
     <div className="bg-white text-sm p-4 flex flex-row items-center relative border font-light h-14">
       <span className="w-3/12 text-left">{action.title}</span>
       <span className="w-3/12 text-left">{action.deadline}</span>
-      <span className="w-3/12 text-center">{action.passingScore}</span>
+      <span className="w-3/12 text-center">{action.passing_score}</span>
       <span className="w-3/12 text-center">
-        {format(new Date(action.dtCompleteClass), 'yyyy-MM-dd')}
+        {format(new Date(action.dt_complete_class), 'yyyy-MM-dd')}
       </span>
 
       <div className="w-3/12 text-center space-x-2">

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { CategoryAction } from '../../components/CategoryAction';
 import Header from '../../components/Header';
+import Nav from '../../components/Nav';
 import api from '../../services/api';
 
 interface ICategoryAction {
@@ -40,14 +41,16 @@ const Dashboard: React.FC = () => {
   }, []);
 
   return (
-    <>
-      <Header />
-      <div className="flex flex-col items-center relative bg space-y-2 bg-gray-300 mb-10">
-        {categoryActions.map(action => (
-          <CategoryAction action={action} />
-        ))}
+    <div className="flex flex-col items-center h-full w-full justify-center top-14 fixed ">
+      <div className="h-screen overflow-auto relative  w-full">
+        <Header />
+        <div className="flex flex-col items-center w-full bg space-y-2  mb-10 ">
+          {categoryActions.map(action => (
+            <CategoryAction action={action} />
+          ))}
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 

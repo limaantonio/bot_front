@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { FormHandles } from '@unform/core';
 import React, { useCallback, useRef } from 'react';
 import Input from '../Input';
@@ -8,8 +9,8 @@ interface IAction {
   id: number;
   title: string;
   deadline: number;
-  passingScore: number;
-  dtCompleteClass: Date;
+  passing_score: number;
+  dt_complete_class: Date;
   available: boolean;
 }
 
@@ -24,8 +25,8 @@ interface IActionData {
   id: number;
   title: string;
   deadline: number;
-  passingScore: number;
-  dtCompleteClass: Date;
+  passing_score: number;
+  dt_complete_class: Date;
 }
 
 const ModalEditAction: React.FC<IModalProps> = ({

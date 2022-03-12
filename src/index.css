@@ -29,7 +29,7 @@ button {
   cursor: pointer;
 }
 
-.react-modal-overlay{
+.react-modal-overlay {
   background: rgba(0, 0, 0, 0.5);
 
   position: fixed;
@@ -43,7 +43,7 @@ button {
   justify-content: center;
 }
 
-.react-modal-content{
+.react-modal-content {
   width: 100%;
   max-width: 576px;
   background: var(--background);
@@ -52,7 +52,7 @@ button {
   border-radius: 0%.25rem;
 }
 
-.react-modal-close{
+.react-modal-close {
   position: absolute;
   right: 1.5rem;
   top: 1.5rem;
