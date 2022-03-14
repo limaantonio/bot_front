@@ -1,93 +1,48 @@
-/* eslint-disable no-underscore-dangle */
-import React, { useState } from 'react';
-import { FiEdit3, FiTrash } from 'react-icons/fi';
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import api from '../../services/api';
 
-interface ICategoryActionPlate {
-  _id: number;
-  title: string;
-  deadline: number;
-  passingScore: number;
-  dtCompleteClass: Date;
-  available: boolean;
+interface ICategoryAction {
+  id: number;
+  name: string;
+  description: string;
+  context: string;
 }
 
-interface IProps {
-  action: ICategoryActionPlate;
-  handleDelete: (id: number) => void;
-  handleEditAction: (action: ICategoryActionPlate) => void;
+interface ICategoryActionProps {
+  action: ICategoryAction;
 }
 
-const Action: React.FC<IProps> = ({
-  action,
-  handleDelete,
-  handleEditAction,
-}: IProps) => {
-  const [isAvailable, setIsAvailable] = useState(action.available);
+export function CategoryAction({ action }: ICategoryActionProps) {
+  const [actionsNumber, setActionsNumber] = useState(0);
 
-  async function toggleAvailable(): Promise<void> {
-    // eslint-disable-next-line no-underscore-dangle
-    await api.put(`action/${action._id}`, {
-      // eslint-disable-next-line no-underscore-dangle
-      id: action._id,
-      title: action.title,
-      deadline: action.deadline,
-      passing_score: action.passingScore,
-      dt_complete_class: action.dtCompleteClass,
-      available: !isAvailable,
-    });
-    setIsAvailable(!isAvailable);
-  }
-
-  function setEditingaction(): void {
-    handleEditAction(action);
-  }
+  useEffect(() => {
+    api
+      .get(`action?active=${true}&category_action_id=${action.id}`)
+      .then(response => {
+        setActionsNumber(response.data.total);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
-    <div className="bg-white text-sm p-4 flex flex-row items-center relative border font-light h-14">
-      <h2 className="w-3/12 text-left">{action.title}</h2>
-      <p className="w-3/12 text-left">{action.deadline}</p>
-      <span className="w-3/12 text-center">{action.passingScore}</span>
-      <span className="w-3/12 text-center">{action.dtCompleteClass}</span>
-
-      <div className="w-3/12 text-center space-x-2">
-        <button
-          type="button"
-          className="bg-gray-200 rounded-full p-2 shadow-sm hover:bg-blue-400 duration-300"
-          onClick={() => setEditingaction()}
-          // eslint-disable-next-line no-underscore-dangle
-          data-testid={`edit-action-${action._id}`}
-        >
-          <FiEdit3 size={20} />
-        </button>
-
-        <button
-          type="button"
-          className="bg-gray-200 rounded-full p-2 shadow-sm hover:bg-red-400 duration-300"
-          // eslint-disable-next-line no-underscore-dangle
-          onClick={() => handleDelete(action._id)}
-          data-testid={`remove-action-${action._id}`}
-        >
-          <FiTrash size={20} />
-        </button>
+    <Link
+      className="relative bg-white p-6 mt-10 w-10/12 rounded-md shadow-md space-y-2 border hover:border-blue-500"
+      to={`/${action.id}`}
+    >
+      <h1 className="font-bold">{action.name}</h1>
+      <p>{action.description}</p>
+      <div className="flex flex-row relative">
+        <span>#{action.context}</span>
+        <span className="absolute right-0 font-light">
+          {actionsNumber} ações ativas
+        </span>
       </div>
-
-      {/* <div className="availability-container">
-          <p>{isAvailable ? 'Disponível' : 'Indisponível'}</p>
-
-          <label htmlFor={`available-switch-${action.id}`} className="switch">
-            <input
-              id={`available-switch-${action.id}`}
-              type="checkbox"
-              checked={isAvailable}
-              onChange={toggleAvailable}
-              data-testid={`change-status-action-${action.id}`}
-            />
-            <span className="slider" />
-          </label>
-        </div> */}
-    </div>
+      {/* <div className="absolute right-0 top-0">
+            <DropdownDetail onOpenNewTransactionModal={handleOpenNewTrasactionModalOpen}/>
+        </div>    */}
+    </Link>
   );
-};
-
-export default Action;
+}

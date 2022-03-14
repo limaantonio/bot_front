@@ -26,6 +26,7 @@ import { Form } from './styles';
 import SelectCustom from '../SelectCustom';
 import SelectCustomImg from '../SelectCustomImg';
 import SelectCustomTeacher from '../SelectCustomTeacher';
+import SelectCustomPerson from '../SelectCustomPerson';
 
 interface IAction {
   id: string;
@@ -74,6 +75,8 @@ interface ISubjectStudent {
 interface IStudent {
   id: number;
   name: string;
+  // eslint-disable-next-line camelcase
+  img_url: string;
 }
 
 interface IChar {
@@ -96,9 +99,11 @@ const NewActionModal: React.FC<IModalProps> = ({
 }) => {
   const formRef = useRef<FormHandles>(null);
 
-  const [testSubjects, setTestSubjects] = useState<ISubject[]>([]);
   const [selectedTeacher, setSelectedTeachers] = useState<ITeacher[]>([]);
   const [teachers, setTeachers] = useState<ITeacher[]>([]);
+
+  const [students, setStudents] = useState<IStudent[]>([]);
+  const [selectedStudent, setSelectedStudent] = useState<IStudent[]>([]);
 
   const [selectAction, setSelectAction] = useState();
   const [selectLesson, setSelectLesson] = useState();
@@ -199,7 +204,7 @@ const NewActionModal: React.FC<IModalProps> = ({
   }
 
   function handleSelectedStudent(event: ChangeEvent<HTMLSelectElement>) {
-    const selectedStudent = event.target.value;
+    const selectedStudents = event.target.value;
   }
 
   // eslint-disable-next-line no-shadow
@@ -242,6 +247,12 @@ const NewActionModal: React.FC<IModalProps> = ({
     });
   }, []);
 
+  useEffect(() => {
+    api.get('student').then(response => {
+      setStudents(response.data);
+    });
+  }, []);
+
   // useEffect(() => {
   //   const fetchData = async () => {
   //     try {
@@ -261,12 +272,7 @@ const NewActionModal: React.FC<IModalProps> = ({
 
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
-      <Form
-        style={{ zIndex: 2 }}
-        className=" text-sm"
-        ref={formRef}
-        onSubmit={handleSubmit}
-      >
+      <Form className=" text-sm" ref={formRef} onSubmit={handleSubmit}>
         <h1 className="text-xl mb-4 font-bold">Configurar Ação Programável</h1>
         <div className="flex flex-row space-x-4">
           {/* Lado esquerdo */}
@@ -334,7 +340,7 @@ const NewActionModal: React.FC<IModalProps> = ({
           </div>
           {/* Lado direito */}
           <div className="w-1/2 space-y-2">
-            <SelectCustomTeacher
+            <SelectCustomPerson
               seletedValue={selectedTeacher}
               setSelectedValue={setSelectedTeachers}
               data={teachers}
@@ -350,11 +356,17 @@ const NewActionModal: React.FC<IModalProps> = ({
 
             <div className="flex flex-row space-x-2">
               <div className="w-6/12">
-                <SelectStudent
+                {/* <SelectStudent
                   title="Selecione o aluno"
                   data={subjectStudents}
                   value={selectStudent}
                   change={handleSelectedStudent}
+                /> */}
+                <SelectCustomPerson
+                  seletedValue={selectedStudent}
+                  setSelectedValue={setSelectedStudent}
+                  data={students}
+                  title="Alunos"
                 />
               </div>
               <div className="w-6/12">

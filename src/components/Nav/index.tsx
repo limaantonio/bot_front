@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 
 import { FiHome } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
+import Dropdown from '../Dropdown';
 
 function Nav() {
   const [active, setActive] = useState(false);
@@ -13,20 +14,17 @@ function Nav() {
   };
 
   return (
-    <>
-      <nav
-        style={{ zIndex: 0 }}
-        className="flex flex-row w-full items-center flex-wrap bg-black p-2 fixed"
-      >
-        <Link to="/">
+    <nav className="flex flex-row w-full items-center justify-center flex-wrap bg-indigo-600 fixed-top">
+      <div className="w-10/12 flex flex-row items-center relative">
+        {/* <Link to="/">
           <a className="inline-flex items-center px-2 mr-4 ">
             <span className="text-xl text-white font-bold uppercase tracking-wide">
               Logo
             </span>
           </a>
-        </Link>
+        </Link> */}
         <button
-          className=" inline-flex p-3 hover:bg-black rounded lg:hidden text-white ml-auto hover:text-white outline-none"
+          className=" inline-flex p-3 hover:bg-indigo-600 lg:hidden text-white ml-auto hover:text-white outline-none"
           onClick={handleClick}
         >
           <svg
@@ -48,33 +46,36 @@ function Nav() {
         <div
           className={`${
             active ? '' : 'hidden'
-          }   w-full lg:inline-flex lg:flex-grow lg:w-auto`}
+          }   w-full lg:inline-flex  lg:w-auto`}
         >
           <div className="lg:inline-flex lg:flex-row lg:ml-auto lg:w-auto w-full lg:items-center items-start  flex flex-col lg:h-auto">
             <Link to="/">
-              <a className="lg:inline-flex lg:w-auto w-full px-3 py-2 rounded text-white font-bold items-center justify-center hover: bg-blue-700 hover:text-white ">
+              <a className="lg:inline-flex lg:w-auto w-full px-3 py-3  text-white font-light items-center justify-center  border-b-4 border-indigo-600 hover:border-green-500 hover:text-white ">
                 Home
               </a>
             </Link>
             <Link to="/">
-              <a className="lg:inline-flex lg:w-auto w-full px-3 py-2 rounded text-white font-bold items-center justify-center hover:bg-blue-700 hover:text-white">
-                Services
+              <a className="lg:inline-flex lg:w-auto w-full px-3 py-3  text-white font-light items-center justify-center  border-b-4 border-indigo-600 hover:border-green-500 hover:text-white ">
+                Acompanamento
               </a>
             </Link>
             <Link to="/">
-              <a className="lg:inline-flex lg:w-auto w-full px-3 py-2 rounded text-white font-bold items-center justify-center hover:bg-blue-700 hover:text-white">
-                About us
+              <a className="lg:inline-flex lg:w-auto w-full px-3 py-3  text-white font-light items-center justify-center  border-b-4 border-indigo-600 hover:border-green-500 hover:text-white ">
+                Relatórios
               </a>
             </Link>
             <Link to="/">
-              <a className="lg:inline-flex lg:w-auto w-full px-3 py-2 rounded text-white font-bold items-center justify-center hover:bg-blue-700 hover:text-white">
-                Contact us
+              <a className="lg:inline-flex lg:w-auto w-full px-3 py-3  text-white font-light items-center justify-center  border-b-4 border-indigo-600 hover:border-green-500 hover:text-white ">
+                Ajuda
               </a>
             </Link>
           </div>
         </div>
-      </nav>
-    </>
+        <div className="absolute right-0">
+          <Dropdown />
+        </div>
+      </div>
+    </nav>
   );
 }
 

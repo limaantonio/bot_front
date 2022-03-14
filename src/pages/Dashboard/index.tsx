@@ -41,8 +41,11 @@ const Dashboard: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center h-full w-full justify-center top-14 fixed ">
-      <div className="h-screen overflow-auto relative  w-full">
+    <div
+      style={{ zIndex: 0 }}
+      className="flex flex-col items-center h-screen  w-full justify-center top-14 fixed "
+    >
+      <div className="mb-10 overflow-auto relative  w-full">
         <Header />
         <div className="flex flex-col items-center w-full bg space-y-2  mb-10 ">
           {categoryActions.map(action => (

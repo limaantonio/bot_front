@@ -62,10 +62,13 @@ const Header: React.FC = () => {
           setIsOpen={toggleModal}
           handleAddAction={handleAddAction}
         />
-        <div className="absolute right-0">
+        <div style={{ zIndex: 0 }} className="absolute right-0">
           <Button openModal={toggleModal} />
         </div>
-        <div className="flex flex-row items-center space-x-4">
+        <div
+          style={{ zIndex: 0 }}
+          className="flex flex-row items-center space-x-4"
+        >
           <span className="text-black text-3xl">Proffy Bot</span>
         </div>
       </div>

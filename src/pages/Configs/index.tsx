@@ -90,51 +90,48 @@ function Configs() {
   }
 
   return (
-    <div>
-      <div className="bg-gray-300 flex flex-col h-screen items-center">
-        <div className="h-14 w-full bg-indigo-600 p-6 items-center flex flex-row ">
-          <Link to="/" className="flex flex-row items-center justify-center">
-            <BsArrowLeftShort className="text-white w-8 h-8" />
-            <span className="text-white">Voltar</span>
-          </Link>
+    <div className=" flex flex-col items-center h-screen  fixed w-full ">
+      <ModalEditAction
+        isOpen={editModalOpen}
+        // eslint-disable-next-line react/jsx-no-bind
+        setIsOpen={toggleEditModal}
+        editingAction={editingAction}
+        // eslint-disable-next-line react/jsx-no-bind
+        handleUpdateAction={handleUpdateAction}
+      />
+      <div className="flex flex-col items-left absolute  w-10/12 h-5/6 p-6  overflow-auto">
+        <h1 className="font-semibold items-">Suas Configurações</h1>
+
+        <div className="bg-white flex flex-row items-center p-4 mt-10 h-14">
+          <h2 className="w-3/12 text-left">Conteúdo</h2>
+          <h1 className="w-3/12 text-left">Dias</h1>
+          <h1 className="w-3/12 text-center">Nota de Corte</h1>
+          <h1 className="w-3/12 text-center">Data para entrega</h1>
+          <h1 className="w-3/12 text-center">Editar/Ativar</h1>
         </div>
-        <ModalEditAction
-          isOpen={editModalOpen}
-          // eslint-disable-next-line react/jsx-no-bind
-          setIsOpen={toggleEditModal}
-          editingAction={editingAction}
-          // eslint-disable-next-line react/jsx-no-bind
-          handleUpdateAction={handleUpdateAction}
-        />
-        <div className="flex flex-col items-left  w-full px-12 p-6">
-          <h1 className="font-semibold items-">Suas Configurações</h1>
 
-          <div className="bg-white flex flex-row items-center p-4 mt-10 h-14">
-            <h2 className="w-3/12 text-left">Conteúdo</h2>
-            <h1 className="w-3/12 text-left">Dias</h1>
-            <h1 className="w-3/12 text-center">Nota de Corte</h1>
-            <h1 className="w-3/12 text-center">Data para entrega</h1>
-            <h1 className="w-3/12 text-center" />
-          </div>
-
-          <div className="overflow-scroll">
-            <div className=" rounded-md  h-full  " data-testid="actions-list">
-              {actions &&
-                actions.map(action => (
-                  <Action
-                    key={action.id}
-                    action={action}
-                    // eslint-disable-next-line react/jsx-no-bind
-                    handleDelete={handleDeleteAction}
-                    // eslint-disable-next-line react/jsx-no-bind
-                    handleEditAction={handleEditAction}
-                  />
-                ))}
-            </div>
+        <div className="overflow-scroll">
+          <div className=" rounded-md  h-full  " data-testid="actions-list">
+            {actions.length ? (
+              actions.map(action => (
+                <Action
+                  key={action.id}
+                  action={action}
+                  // eslint-disable-next-line react/jsx-no-bind
+                  handleDelete={handleDeleteAction}
+                  // eslint-disable-next-line react/jsx-no-bind
+                  handleEditAction={handleEditAction}
+                />
+              ))
+            ) : (
+              <div className="flex flex-row border-2 border-white items-center justify-center">
+                <p className="text-sm text-gray-400">Sem conteúdo</p>
+              </div>
+            )}
           </div>
         </div>
+        <span className="mt-8">Total: {actions.length}</span>
       </div>
-      )
     </div>
   );
 }
