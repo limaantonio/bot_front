@@ -26,7 +26,7 @@ interface IProps {
 function SelectStudent({ title, data, value, change }: IProps) {
   return (
     <div className="flex flex-col">
-      <span className="font-medium">{title}</span>
+      <span className="font-medium text-gray-700">{title}</span>
       <select
         className="px-2 font-light text-grayTextBase space-x-2 border  h-9 bg-white text-light box-border t border-color rounded-lg
             focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-sky-500"

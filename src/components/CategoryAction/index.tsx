@@ -29,7 +29,7 @@ export function CategoryAction({ action }: ICategoryActionProps) {
 
   return (
     <Link
-      className="relative bg-white p-6 mt-10 w-10/12 rounded-md shadow-md space-y-2 border hover:border-blue-500"
+      className="relative bg-white p-6 mt-10 w-10/12 rounded-md shadow space-y-2 border hover:border-4 hover:border-blue-500 hover:shadow-lg "
       to={`/${action.id}`}
     >
       <h1 className="font-bold">{action.name}</h1>

@@ -27,6 +27,7 @@ import SelectCustom from '../SelectCustom';
 import SelectCustomImg from '../SelectCustomImg';
 import SelectCustomTeacher from '../SelectCustomTeacher';
 import SelectCustomPerson from '../SelectCustomPerson';
+import List from '../List';
 
 interface IAction {
   id: string;
@@ -271,12 +272,16 @@ const NewActionModal: React.FC<IModalProps> = ({
   };
 
   return (
-    <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
-      <Form className=" text-sm" ref={formRef} onSubmit={handleSubmit}>
-        <h1 className="text-xl mb-4 font-bold">Configurar Ação Programável</h1>
+    <Modal
+      isOpen={isOpen}
+      setIsOpen={setIsOpen}
+      title="Configurar Ação Programável"
+      submit="add-action-button"
+    >
+      <Form className=" text-sm " ref={formRef} onSubmit={handleSubmit}>
         <div className="flex flex-row space-x-4">
           {/* Lado esquerdo */}
-          <div className="w-1/2 space-y-2">
+          <div className="w-5/12 space-y-2">
             <Select
               title="Bot"
               data={typeContexts}
@@ -286,7 +291,7 @@ const NewActionModal: React.FC<IModalProps> = ({
             />
 
             <SelectCategoryAction
-              title="Tipo"
+              title="História"
               data={actions}
               value={selectAction}
               // eslint-disable-next-line react/jsx-no-bind
@@ -294,17 +299,44 @@ const NewActionModal: React.FC<IModalProps> = ({
             />
 
             <div className="flex flex-col">
-              <span className="font-medium">Descrição</span>
+              <span className="font-medium text-gray-700">Descrição</span>
               <textarea
                 disabled
-                className="p-2 border rounded-lg h-16 border-gray-200 shadow-sm font-light text-gray-600
+                className="p-2 border rounded-lg h-20 border-gray-200 shadow-sm font-light text-gray-600
               focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-sky-500"
                 name="name"
                 value={action?.description}
-              >
-                {}
-              </textarea>
+              />
             </div>
+
+            {context === 'REVISAO' ? (
+              <div className="flex flex-col">
+                <span className="font-medium text-gray-700">
+                  Quantidade de dias
+                </span>
+                <Input
+                  className="h-9 p-2 rounded-lg border border-gray-200 shadow-sm font-light text-gray-600
+              focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-sky-500"
+                  name="name"
+                />
+              </div>
+            ) : (
+              <></>
+            )}
+
+            {context === 'RECOMENDACAO' ? (
+              <div className="flex flex-col">
+                <span className="font-medium text-gray-700">Qual a nota?</span>
+                <Input
+                  className="h-9 p-2 rounded-lg border border-gray-200 shadow-sm font-light text-gray-600
+              focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-sky-500"
+                  name="name"
+                />
+              </div>
+            ) : (
+              <></>
+            )}
+            {context === 'FEEDBACK' ? <List data={students} /> : <></>}
 
             {/* <div className="search">
               <input
@@ -339,92 +371,88 @@ const NewActionModal: React.FC<IModalProps> = ({
             /> */}
           </div>
           {/* Lado direito */}
-          <div className="w-1/2 space-y-2">
-            <SelectCustomPerson
-              seletedValue={selectedTeacher}
-              setSelectedValue={setSelectedTeachers}
-              data={teachers}
-              title="Professor"
-            />
+          <div className="w-7/12">
+            <h1 className="border-l border-r border-t p-3 rounded-t ">
+              Informações
+            </h1>
+            <div className="border p-3 space-y-2 rounded-b ">
+              <SelectCustomPerson
+                seletedValue={selectedTeacher}
+                setSelectedValue={setSelectedTeachers}
+                data={teachers}
+                title="Professor"
+              />
 
-            <SelectSubject
-              title="Disciplinas/Turma"
-              data={subjects}
-              value={selectSubject}
-              change={handleSelectedSubject}
-            />
-
-            <div className="flex flex-row space-x-2">
-              <div className="w-6/12">
-                {/* <SelectStudent
-                  title="Selecione o aluno"
-                  data={subjectStudents}
-                  value={selectStudent}
-                  change={handleSelectedStudent}
-                /> */}
-                <SelectCustomPerson
-                  seletedValue={selectedStudent}
-                  setSelectedValue={setSelectedStudent}
-                  data={students}
-                  title="Alunos"
+              <div className="w-full">
+                <SelectSubject
+                  title="Disciplinas/Turma"
+                  data={subjects}
+                  value={selectSubject}
+                  change={handleSelectedSubject}
                 />
               </div>
-              <div className="w-6/12">
+
+              <div className="w-full">
                 <SelectLesson
-                  title="Selecione a aula"
+                  title="Selecione a Aula"
                   data={lessons}
                   value={selectLesson}
                   change={handleSelectedLesson}
                 />
               </div>
-            </div>
 
-            <div className="flex flex-col">
-              <span className="font-medium">Descrição da aula</span>
-              <Input
-                disabled
-                className="h-9 px-2 border rounded-lg border-gray-200 shadow-sm font-light text-gray-600
-              focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-sky-500"
-                name="name"
-                value={lesson?.description}
-              />
-            </div>
+              <div className="flex flex-row space-x-2">
+                <div className="">
+                  {/* <SelectStudent
+                  title="Selecione o aluno"
+                  data={subjectStudents}
+                  value={selectStudent}
+                  change={handleSelectedStudent}
+                /> */}
+                </div>
+              </div>
 
-            <Select
-              title="Ação"
-              data={typeActions}
-              value={selectTypeContent}
-              change={handleSelectedContent}
-            />
-
-            {/* <div className="w-4/12">
-              <SelectContent title="Conteúdo" data={contents} value={selectContent} change={handleSelectedContent}/>
-            </div> */}
-
-            {context === 'REVISAO' ? (
               <div className="flex flex-col">
-                <span className="font-medium">Quantidade de dias</span>
+                <span className="font-medium text-gray-700">
+                  Descrição da aula
+                </span>
                 <Input
-                  className="h-9 p-2 rounded-lg border border-gray-200 shadow-sm font-light text-gray-600
+                  disabled
+                  className="h-9 px-2 border rounded-lg border-gray-200 shadow-sm font-light text-gray-600
               focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-sky-500"
                   name="name"
+                  value={lesson?.description}
                 />
               </div>
-            ) : (
-              <></>
-            )}
 
-            <Upload onFileUploaded={setSelectedFile} />
+              {context === 'FEEDBACK' ? (
+                <SelectCustomPerson
+                  seletedValue={selectedStudent}
+                  setSelectedValue={setSelectedStudent}
+                  data={students}
+                  title="Aluno"
+                />
+              ) : (
+                <></>
+              )}
+
+              <div className="  space-y-2 ">
+                {context === 'REVISAO' || context === 'RECOMENDACAO' ? (
+                  <>
+                    <Select
+                      title="Ação"
+                      data={typeActions}
+                      value={selectTypeContent}
+                      change={handleSelectedContent}
+                    />
+                    <Upload onFileUploaded={setSelectedFile} />
+                  </>
+                ) : (
+                  <></>
+                )}
+              </div>
+            </div>
           </div>
-        </div>
-        <div className="w-full flex flex-row justify-end">
-          <button
-            className="px-8 p-2 bg-blue-500 hover:bg-blue-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 rounded-md text-white"
-            type="submit"
-            data-testid="add-action-button"
-          >
-            <p className="text">Finalizar</p>
-          </button>
         </div>
       </Form>
     </Modal>

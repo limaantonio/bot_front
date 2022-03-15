@@ -46,17 +46,18 @@ const ModalEditAction: React.FC<IModalProps> = ({
   );
 
   return (
-    <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
+    <Modal
+      isOpen={isOpen}
+      setIsOpen={setIsOpen}
+      title="Editar Configurar Ação Programável"
+      submit="edit-Action-button"
+    >
       <Form
         className="space-y-4 mb-14 p-2 space-y-2 flex flex-col "
         ref={formRef}
         onSubmit={handleSubmit}
         initialData={editingAction}
       >
-        <h1 className="text-xl mb-4 font-bold">
-          Editar Configurar Ação Programável
-        </h1>
-
         <div className="flex flex-col">
           <span className="">Ação</span>
           <Input
@@ -89,14 +90,6 @@ const ModalEditAction: React.FC<IModalProps> = ({
             />
           </div>
         </div>
-
-        <button
-          className=" bg-blue-500 hover:bg-blue-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 p-2 rounded-md text-white w-36 absolute right-7 bottom-4"
-          type="submit"
-          data-testid="edit-Action-button"
-        >
-          <div className="text">Editar</div>
-        </button>
       </Form>
     </Modal>
   );

@@ -19,14 +19,14 @@ export default function SelectCustomPerson({
   return (
     <Listbox value={seletedValue} onChange={setSelectedValue}>
       {({ open }) => (
-        <>
-          <Listbox.Label className="block text-sm font-medium text-gray-700">
+        <div className="flex flex-row items-center w-full">
+          <Listbox.Label className="text-sm w-4/12 font-medium text-gray-700">
             {title}
           </Listbox.Label>
-          <div className="mt-1 relative">
-            <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+          <div className="mt-1 relative w-full">
+            <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm  p-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
               {seletedValue.img_url ? (
-                <span className="flex items-center  h-6">
+                <span className="flex items-center px-2">
                   <img
                     src={seletedValue.img_url}
                     alt=""
@@ -37,7 +37,7 @@ export default function SelectCustomPerson({
                   </span>
                 </span>
               ) : (
-                <span className="flex items-center  h-6">
+                <span className="flex items-center px-2 h-6">
                   <span className="ml-3 block truncate">
                     {seletedValue.name}
                   </span>
@@ -111,7 +111,7 @@ export default function SelectCustomPerson({
               </Listbox.Options>
             </Transition>
           </div>
-        </>
+        </div>
       )}
     </Listbox>
   );
