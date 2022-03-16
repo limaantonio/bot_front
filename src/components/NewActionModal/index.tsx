@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable jsx-a11y/role-has-required-aria-props */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/jsx-no-bind */
@@ -18,9 +19,6 @@ import Modal from '../Modal';
 import api from '../../services/api';
 import { Select } from '../Select';
 import { SelectCategoryAction } from '../SelectCategoryAction';
-import { SelectLesson } from '../SelectLesson';
-import { SelectSubject } from '../SelectSubject';
-import { SelectStudent } from '../SelectStudent';
 import Upload from '../Upload';
 import { Form } from './styles';
 import SelectCustom from '../SelectCustom';
@@ -28,6 +26,8 @@ import SelectCustomImg from '../SelectCustomImg';
 import SelectCustomTeacher from '../SelectCustomTeacher';
 import SelectCustomPerson from '../SelectCustomPerson';
 import List from '../List';
+import SelectCustomSubjects from '../SelectCustomSubjects';
+import SelectCustomLesson from '../SelectCustomLesson';
 
 interface IAction {
   id: string;
@@ -80,17 +80,11 @@ interface IStudent {
   img_url: string;
 }
 
-interface IChar {
-  id: number;
-  name: string;
-  image: string;
-}
-
 interface ITeacher {
-  id: number;
+  id: string;
   name: string;
   email: string;
-  imgUrl: string;
+  img_url: string;
 }
 
 const NewActionModal: React.FC<IModalProps> = ({
@@ -100,35 +94,30 @@ const NewActionModal: React.FC<IModalProps> = ({
 }) => {
   const formRef = useRef<FormHandles>(null);
 
-  const [selectedTeacher, setSelectedTeachers] = useState<ITeacher[]>([]);
   const [teachers, setTeachers] = useState<ITeacher[]>([]);
+  const [selectedTeacher, setSelectedTeacher] = useState<ITeacher>();
+
+  const [subjects, setSubjects] = useState<ISubject[]>([]);
+  const [selectSubject, setSelectSubject] = useState<ISubject>();
+
+  const [lessons, setLessons] = useState<ILesson[]>([]);
+  const [selectLesson, setSelectLesson] = useState<ILesson>();
 
   const [students, setStudents] = useState<IStudent[]>([]);
   const [selectedStudent, setSelectedStudent] = useState<IStudent[]>([]);
-
-  const [selectAction, setSelectAction] = useState();
-  const [selectLesson, setSelectLesson] = useState();
-  const [selectTypeContext, setSelectTypeContext] = useState();
-  const [selectTypeContent, setSelectTypeContent] = useState();
-  const [selectSubject, setSelectSubject] = useState();
   const [selectStudent, setSelectStudent] = useState();
 
-  const [context, setContext] = useState('0');
+  const [selectAction, setSelectAction] = useState();
   const [actions, setActions] = useState<IAction[]>([]);
+  const [action, setAction] = useState<IAction>();
+
+  const [selectTypeContext, setSelectTypeContext] = useState();
+  const [selectTypeContent, setSelectTypeContent] = useState();
+  const [context, setContext] = useState('0');
 
   const [contents, setContents] = useState<IContent[]>([]);
-  const [lessons, setLessons] = useState<ILesson[]>([]);
-  const [subjects, setSubjects] = useState<ISubject[]>([]);
-  const [subjectStudents, setSubjectStudents] = useState<ISubjectStudent[]>([]);
-
-  const [action, setAction] = useState<IAction>();
-  const [subject, setSubject] = useState<ISubject>();
-  const [lesson, setLesson] = useState<ILesson>();
 
   const [selectedFile, setSelectedFile] = useState<File>();
-
-  const [query, setQuery] = useState('');
-  const [characters, setCharacters] = useState<IChar[]>([]);
 
   const typeContexts = [
     { id: 1, key: 'REVISAO', name: 'Revisão' },
@@ -162,21 +151,6 @@ const NewActionModal: React.FC<IModalProps> = ({
     setSelectAction(id);
   }
 
-  function handleSelectedSubject(event: ChangeEvent<HTMLSelectElement>) {
-    const id = event.target.value;
-
-    loadLessons(id);
-    loadSubjectStudent(id);
-
-    subjects.map(a => {
-      if (a.id === id && a != null) {
-        setSubject(a);
-      }
-    });
-
-    setSelectSubject(id);
-  }
-
   function handleSelectedContext(event: ChangeEvent<HTMLSelectElement>) {
     // eslint-disable-next-line no-shadow
     const context = event.target.value;
@@ -190,18 +164,6 @@ const NewActionModal: React.FC<IModalProps> = ({
     const content = event.target.value;
 
     loadContents(content);
-  }
-
-  function handleSelectedLesson(event: ChangeEvent<HTMLSelectElement>) {
-    const id = event.target.value;
-
-    lessons.map(a => {
-      if (a.id === id && a != null) {
-        setLesson(a);
-      }
-    });
-
-    setSelectLesson(id);
   }
 
   function handleSelectedStudent(event: ChangeEvent<HTMLSelectElement>) {
@@ -221,24 +183,9 @@ const NewActionModal: React.FC<IModalProps> = ({
     setContents(response.data);
   }
 
-  // eslint-disable-next-line no-shadow
-  async function loadLessons(subject: string): Promise<void> {
-    const response = await api.get(`lesson?subject$=${subject}`);
-
-    setLessons(response.data);
-  }
-
-  // eslint-disable-next-line no-shadow
-  async function loadSubjectStudent(subject: string): Promise<void> {
-    const response = await api.get(`registration?subject=${subject}`);
-
-    setSubjectStudents(response.data);
-  }
-
   useEffect(() => {
-    api.get('subject').then(response => {
-      setSubjects(response.data);
-      loadLessons(response.data);
+    api.get('student').then(response => {
+      setStudents(response.data);
     });
   }, []);
 
@@ -249,23 +196,16 @@ const NewActionModal: React.FC<IModalProps> = ({
   }, []);
 
   useEffect(() => {
-    api.get('student').then(response => {
-      setStudents(response.data);
+    api.get(`subject?teacher=${selectedTeacher?.id}`).then(response => {
+      setSubjects(response.data);
     });
-  }, []);
+  }, [selectedTeacher]);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const { data } = await api.get(`subject=${query}`);
-  //       setCharacters(data.results);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [query]);
+  useEffect(() => {
+    api.get(`lesson?subject=${selectSubject?.id}`).then(response => {
+      setLessons(response.data);
+    });
+  }, [selectSubject]);
 
   const handleUpload = file => {
     setSelectedFile(file);
@@ -336,68 +276,50 @@ const NewActionModal: React.FC<IModalProps> = ({
             ) : (
               <></>
             )}
-            {context === 'FEEDBACK' ? <List data={students} /> : <></>}
-
-            {/* <div className="search">
-              <input
-                type="text"
-                placeholder="Search Character"
-                className="input"
-                onChange={event => setQuery(event.target.value)}
-                value={query}
-              />
-            </div>
-            <div className="results">
-              {characters.map(character => (
-                <div>
-                  <img src={character.image} alt={character.name} />
-                  {character.name}
-                </div>
-              ))}
-            </div> */}
-
-            {/* <SelectCustomImg
-              seletedValue={selected}
-              setSelectedValue={setSelected}
-              data={people}
-              title="Professor"
-            /> */}
-
-            {/* <SelectCustom
-              seletedValue={testSubjects}
-              setSelectedValue={setTestSubjects}
-              data={subjects}
-              title="Disciplina"
-            /> */}
+            {context === 'FEEDBACK' ? (
+              <div className=" space-y-2">
+                <List data={students} />
+                <button
+                  className="bg-indigo-600 p-2 text-white rounded hover:bg-indigo-800"
+                  type="button"
+                >
+                  Atualizar Nota
+                </button>{' '}
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
+
           {/* Lado direito */}
           <div className="w-7/12">
             <h1 className="border-l border-r border-t p-3 rounded-t ">
               Informações
             </h1>
             <div className="border p-3 space-y-2 rounded-b ">
+              {/* correto */}
               <SelectCustomPerson
-                seletedValue={selectedTeacher}
-                setSelectedValue={setSelectedTeachers}
-                data={teachers}
                 title="Professor"
+                data={teachers}
+                v={selectedTeacher}
+                change={setSelectedTeacher}
               />
-
+              {/* correto */}
               <div className="w-full">
-                <SelectSubject
+                <SelectCustomSubjects
                   title="Disciplinas/Turma"
                   data={subjects}
-                  value={selectSubject}
-                  change={handleSelectedSubject}
+                  v={selectSubject}
+                  change={setSelectSubject}
                 />
               </div>
 
               <div className="w-full">
-                <SelectLesson
+                <SelectCustomLesson
                   title="Selecione a Aula"
                   data={lessons}
-                  value={selectLesson}
-                  change={handleSelectedLesson}
+                  v={selectLesson}
+                  change={setSelectLesson}
                 />
               </div>
 
@@ -421,11 +343,11 @@ const NewActionModal: React.FC<IModalProps> = ({
                   className="h-9 px-2 border rounded-lg border-gray-200 shadow-sm font-light text-gray-600
               focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-sky-500"
                   name="name"
-                  value={lesson?.description}
+                  value={selectLesson?.description}
                 />
               </div>
 
-              {context === 'FEEDBACK' ? (
+              {/* {context === 'FEEDBACK' ? (
                 <SelectCustomPerson
                   seletedValue={selectedStudent}
                   setSelectedValue={setSelectedStudent}
@@ -434,7 +356,7 @@ const NewActionModal: React.FC<IModalProps> = ({
                 />
               ) : (
                 <></>
-              )}
+              )} */}
 
               <div className="  space-y-2 ">
                 {context === 'REVISAO' || context === 'RECOMENDACAO' ? (

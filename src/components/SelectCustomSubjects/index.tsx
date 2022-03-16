@@ -12,21 +12,25 @@ import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
-interface ITeacher {
+interface ISubject {
   id: string;
+  code: string;
   name: string;
-  email: string;
-  img_url: string;
+  semester: string;
 }
-
 interface IProps {
   title: string;
-  data: ITeacher[];
-  v: ITeacher | undefined;
+  data: ISubject[];
+  v: ISubject | undefined;
   change: any;
 }
 
-export default function SelectCustomPerson({ title, data, change, v }: IProps) {
+export default function SelectCustomSubjects({
+  title,
+  data,
+  change,
+  v,
+}: IProps) {
   return (
     <Listbox value={v} onChange={change}>
       {({ open }) => (
@@ -36,21 +40,9 @@ export default function SelectCustomPerson({ title, data, change, v }: IProps) {
           </Listbox.Label>
           <div className="mt-1 relative w-full">
             <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm  p-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-              {v?.img_url ? (
-                <span className="flex items-center px-2">
-                  <img
-                    src={v?.img_url}
-                    alt=""
-                    className="flex-shrink-0 h-6 w-6 rounded-full"
-                  />
-                  <span className="ml-3 block truncate">{v.name}</span>
-                </span>
-              ) : (
-                <span className="flex items-center px-2 h-6">
-                  <span className="ml-3 block truncate">{v?.name}</span>
-                </span>
-              )}
-
+              <span className="flex items-center px-2 h-6">
+                <span className="ml-3 block truncate">{v?.name}</span>
+              </span>
               <span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                 <SelectorIcon
                   className="h-5 w-5 text-gray-400"
@@ -81,16 +73,6 @@ export default function SelectCustomPerson({ title, data, change, v }: IProps) {
                     {({ selected, active }) => (
                       <>
                         <div className="flex items-center">
-                          {person.img_url ? (
-                            <img
-                              src={person.img_url}
-                              alt=""
-                              className="flex-shrink-0 h-6 w-6 rounded-full"
-                            />
-                          ) : (
-                            <FaUserCircle className="flex-shrink-0 h-6 w-6 rounded-full" />
-                          )}
-
                           <span
                             className={classNames(
                               selected ? 'font-semibold' : 'font-normal',
