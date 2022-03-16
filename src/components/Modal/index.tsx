@@ -53,6 +53,7 @@ const Modal: React.FC<IModalProps> = ({
             borderRadius: '8px',
             width: '750px',
             border: 'none',
+            padding: 0,
           },
           overlay: {
             backgroundColor: '#121214e6',
@@ -60,16 +61,16 @@ const Modal: React.FC<IModalProps> = ({
         }}
       >
         <div className="space-y-4">
-          <div className="w-full relative  flex flex-row items-center ">
+          <div className="w-full relative  flex flex-row items-center px-6 py-4 border-b">
             <h1 className="text-xl font-bold ">{title}</h1>
             <button type="button" onClick={() => setIsOpen()}>
-              <AiOutlineClose className="absolute right-0 top-1 text-gray-500 h-5 w-5" />
+              <AiOutlineClose className="absolute right-6 top-5 text-gray-500 h-5 w-5" />
             </button>
           </div>
-          <hr />
+
           {children}
-          <hr />
-          <div className="w-full flex flex-row justify-end space-x-2">
+
+          <div className="w-full flex flex-row justify-end space-x-2 border-t px-6 py-2">
             <button
               className="px-8 p-2 bg-gray-200 hover:bg-gray-300 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 rounded-md text-white"
               type="submit"

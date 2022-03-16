@@ -218,7 +218,7 @@ const NewActionModal: React.FC<IModalProps> = ({
       title="Configurar Ação Programável"
       submit="add-action-button"
     >
-      <Form className=" text-sm " ref={formRef} onSubmit={handleSubmit}>
+      <Form className=" text-sm px-6" ref={formRef} onSubmit={handleSubmit}>
         <div className="flex flex-row space-x-4">
           {/* Lado esquerdo */}
           <div className="w-5/12 space-y-2">
@@ -298,13 +298,15 @@ const NewActionModal: React.FC<IModalProps> = ({
             </h1>
             <div className="border p-3 space-y-2 rounded-b ">
               {/* correto */}
-              <SelectCustomPerson
-                title="Professor"
-                data={teachers}
-                v={selectedTeacher}
-                change={setSelectedTeacher}
-              />
-              {/* correto */}
+              <div className="w-full">
+                <SelectCustomPerson
+                  title="Professor"
+                  data={teachers}
+                  v={selectedTeacher}
+                  change={setSelectedTeacher}
+                />
+              </div>
+
               <div className="w-full">
                 <SelectCustomSubjects
                   title="Disciplinas/Turma"

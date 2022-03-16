@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable camelcase */
 /* eslint-disable react/no-unused-prop-types */
@@ -31,13 +32,14 @@ export default function SelectCustomPerson({ title, data, change, v }: IProps) {
     <Listbox value={v} onChange={change}>
       {({ open }) => (
         <div className="flex flex-row items-center w-full">
-          <Listbox.Label className="text-sm w-4/12 font-medium text-gray-700">
+          <Listbox.Label className="text-sm w-7/12 font-medium text-gray-700">
             {title}
           </Listbox.Label>
           <div className="mt-1 relative w-full">
-            <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm  p-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-              {v?.img_url ? (
+            <Listbox.Button className="relative w-full bg-white border h-10 border-gray-300 rounded-md shadow-sm  p-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+              {v?.img_url && v?.name ? (
                 <span className="flex items-center px-2">
+                  <span className="ml-3 block truncate">{v?.name}</span>
                   <img
                     src={v?.img_url}
                     alt=""
@@ -45,10 +47,13 @@ export default function SelectCustomPerson({ title, data, change, v }: IProps) {
                   />
                   <span className="ml-3 block truncate">{v.name}</span>
                 </span>
-              ) : (
-                <span className="flex items-center px-2 h-6">
+              ) : v?.name && !v?.img_url ? (
+                <span className="flex items-center px-2">
+                  <FaUserCircle className="flex-shrink-0 h-6 w-6 rounded-full" />
                   <span className="ml-3 block truncate">{v?.name}</span>
                 </span>
+              ) : (
+                <></>
               )}
 
               <span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">

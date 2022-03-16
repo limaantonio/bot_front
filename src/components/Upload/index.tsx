@@ -30,13 +30,13 @@ export default function Upload({ onFileUploaded }) {
 
   return (
     <div className="flex flex-col space-y-4">
-      <div className="flex items-center justify-center border-2 border-dashed rounded-lg w-full h-18">
+      <div className="flex items-center justify-center border-2 border-dashed border-indigo-300 rounded-lg w-full h-18">
         <Dropzone onDrop={handleDrop}>
           {({ getRootProps, getInputProps }) => (
             <div {...getRootProps({ className: 'dropzone' })}>
               <input {...getInputProps()} />
               <div className="flex flex-col items-center ">
-                <FaCloudUploadAlt className="w-10 h-10" />
+                <FaCloudUploadAlt className="w-10 h-10 text-blue-300" />
                 <p>Selecione o arquivo</p>
               </div>
             </div>

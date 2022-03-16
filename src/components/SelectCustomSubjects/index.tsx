@@ -34,12 +34,12 @@ export default function SelectCustomSubjects({
   return (
     <Listbox value={v} onChange={change}>
       {({ open }) => (
-        <div className="flex flex-row items-center w-full">
-          <Listbox.Label className="text-sm w-4/12 font-medium text-gray-700">
+        <div className="flex flex-row items-center ">
+          <Listbox.Label className="text-sm font-medium  text-gray-700 w-7/12">
             {title}
           </Listbox.Label>
-          <div className="mt-1 relative w-full">
-            <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm  p-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+          <div className="mt-1 relative -400 w-full">
+            <Listbox.Button className="relative  w-full bg-white border border-gray-300 rounded-md shadow-sm  p-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
               <span className="flex items-center px-2 h-6">
                 <span className="ml-3 block truncate">{v?.name}</span>
               </span>
