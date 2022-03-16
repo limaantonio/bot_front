@@ -37,9 +37,8 @@ export default function SelectCustomPerson({ title, data, change, v }: IProps) {
           </Listbox.Label>
           <div className="mt-1 relative w-full">
             <Listbox.Button className="relative w-full bg-white border h-10 border-gray-300 rounded-md shadow-sm  p-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-              {v?.img_url && v?.name ? (
+              {v?.img_url ? (
                 <span className="flex items-center px-2">
-                  <span className="ml-3 block truncate">{v?.name}</span>
                   <img
                     src={v?.img_url}
                     alt=""
