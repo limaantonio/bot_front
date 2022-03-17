@@ -21,10 +21,10 @@ export default function List({ data }: IList): JSX.Element {
       </div>
       <ul
         className="
-       rounded-b h-32 overflow-auto  "
+       rounded-b h-20 overflow-auto"
       >
         {data.map(student => (
-          <li className="h-2/6 flex flex-row items-center hover:bg-indigo-500 hover:text-white p-2 cursor-pointer ">
+          <li className="flex flex-row items-center hover:bg-indigo-500 hover:text-white p-2 cursor-pointer">
             <button
               type="button"
               className="flex flex-row items-center space-x-2"

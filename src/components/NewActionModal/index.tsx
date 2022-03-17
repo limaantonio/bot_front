@@ -28,6 +28,7 @@ import SelectCustomPerson from '../SelectCustomPerson';
 import List from '../List';
 import SelectCustomSubjects from '../SelectCustomSubjects';
 import SelectCustomLesson from '../SelectCustomLesson';
+import SelectCustomStudentLesson from '../SelectCustomStudentLesson';
 
 interface IAction {
   id: string;
@@ -45,6 +46,7 @@ interface ILesson {
   id: string;
   title: string;
   description: string;
+  student_lesson: IStudentLesson[];
 }
 
 interface ICreateActionData {
@@ -67,9 +69,16 @@ interface ISubject {
 
 interface ISubjectStudent {
   id: string;
-  code: string;
-  name: string;
-  semester: string;
+  status: string;
+  score: number;
+  student: IStudent;
+}
+
+interface IStudentLesson {
+  id: string;
+  status: string;
+  score: number;
+  lesson: ILesson;
   student: IStudent;
 }
 
@@ -104,8 +113,11 @@ const NewActionModal: React.FC<IModalProps> = ({
   const [selectLesson, setSelectLesson] = useState<ILesson>();
 
   const [students, setStudents] = useState<IStudent[]>([]);
-  const [selectedStudent, setSelectedStudent] = useState<IStudent[]>([]);
-  const [selectStudent, setSelectStudent] = useState();
+  const [selectStudent, setSelectStudent] = useState<IStudent>();
+
+  const [studentLessons, setStudentLessons] = useState<IStudentLesson[]>([]);
+  const [selectedStudentLessons, setSelectedStudentLessons] =
+    useState<IStudentLesson>();
 
   const [selectAction, setSelectAction] = useState();
   const [actions, setActions] = useState<IAction[]>([]);
@@ -201,11 +213,31 @@ const NewActionModal: React.FC<IModalProps> = ({
     });
   }, [selectedTeacher]);
 
+  // useEffect(() => {
+  //   api.get(`student_lesson?lesson=${selectLesson?.id}`).then(response => {
+  //     setStudents(response.data);
+  //   });
+  // }, [selectLesson]);
+
   useEffect(() => {
     api.get(`lesson?subject=${selectSubject?.id}`).then(response => {
       setLessons(response.data);
     });
   }, [selectSubject]);
+
+  useEffect(() => {
+    api
+      .get(`student_lesson?lesson=${selectLesson?.id}&status=${'PENDENTE'}`)
+      .then(response => {
+        setStudentLessons(response.data);
+      });
+  }, [selectLesson]);
+
+  console.log(selectedStudentLessons);
+
+  // useEffect(() => {
+  //   setStudentLessons(selectLesson?.student_lesson);
+  // }, [selectLesson]);
 
   const handleUpload = file => {
     setSelectedFile(file);
@@ -324,6 +356,29 @@ const NewActionModal: React.FC<IModalProps> = ({
                   change={setSelectLesson}
                 />
               </div>
+
+              <div className="w-full">
+                <SelectCustomStudentLesson
+                  title="Alunos/Aula"
+                  data={studentLessons}
+                  v={selectedStudentLessons}
+                  change={setSelectedStudentLessons}
+                />
+              </div>
+
+              {/* {context === 'RECOMENDACAO' || context === 'REVISAO' ? (
+                <div className=" space-y-2">
+                  <List data={students} />
+                  <button
+                    className="bg-indigo-600 p-2 text-white rounded hover:bg-indigo-800"
+                    type="button"
+                  >
+                    Atualizar Nota
+                  </button>{' '}
+                </div>
+              ) : (
+                <></>
+              )} */}
 
               <div className="flex flex-row space-x-2">
                 <div className="">

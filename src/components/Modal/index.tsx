@@ -79,7 +79,7 @@ const Modal: React.FC<IModalProps> = ({
               <p className="text-gray-600">Cancelar</p>
             </button>
             <button
-              className="px-8 p-2 bg-blue-500 hover:bg-blue-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 rounded-md text-white"
+              className="px-8 p-2 bg-indigo-600 hover:bg-indigo-700 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 rounded-md text-white"
               type="submit"
               data-testid={submit}
             >
