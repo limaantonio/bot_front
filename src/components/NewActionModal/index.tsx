@@ -13,31 +13,19 @@ import React, {
   ChangeEvent,
   useEffect,
 } from 'react';
-import axios from 'axios';
 import Input from '../Input';
 import Modal from '../Modal';
 import api from '../../services/api';
 import { Select } from '../Select';
 import { SelectCategoryAction } from '../SelectCategoryAction';
-import Upload from '../Upload';
 import { Form } from './styles';
-import SelectCustom from '../SelectCustom';
-import SelectCustomImg from '../SelectCustomImg';
-import SelectCustomTeacher from '../SelectCustomTeacher';
 import SelectCustomPerson from '../SelectCustomPerson';
-import List from '../List';
 import SelectCustomSubjects from '../SelectCustomSubjects';
 import SelectCustomLesson from '../SelectCustomLesson';
-import SelectCustomStudentLesson from '../SelectCustomStudentLesson';
+import SelectCustomContent from '../SelectCustomContent';
 
 interface IAction {
   id: string;
-  name: string;
-  description: string;
-}
-
-interface IContent {
-  id: number;
   name: string;
   description: string;
 }
@@ -96,6 +84,14 @@ interface ITeacher {
   img_url: string;
 }
 
+interface IContent {
+  id: string;
+  name: string;
+  type: string;
+  content_url: string;
+  lesson: ILesson;
+}
+
 const NewActionModal: React.FC<IModalProps> = ({
   isOpen,
   setIsOpen,
@@ -112,6 +108,9 @@ const NewActionModal: React.FC<IModalProps> = ({
   const [lessons, setLessons] = useState<ILesson[]>([]);
   const [selectLesson, setSelectLesson] = useState<ILesson>();
 
+  const [contents, setContents] = useState<IContent[]>([]);
+  const [selectedContent, setSelectedContent] = useState<IContent>();
+
   const [students, setStudents] = useState<IStudent[]>([]);
   const [selectStudent, setSelectStudent] = useState<IStudent>();
 
@@ -127,8 +126,6 @@ const NewActionModal: React.FC<IModalProps> = ({
   const [selectTypeContent, setSelectTypeContent] = useState();
   const [context, setContext] = useState('0');
 
-  const [contents, setContents] = useState<IContent[]>([]);
-
   const [selectedFile, setSelectedFile] = useState<File>();
 
   const typeContexts = [
@@ -138,10 +135,10 @@ const NewActionModal: React.FC<IModalProps> = ({
   ];
 
   const typeActions = [
-    { id: 1, key: 'ATIVIDADE', name: 'Atividade' },
+    { id: 1, key: 'ATIVIDADE', name: 'Entregar Atividade' },
     { id: 2, key: 'QUIZ', name: 'Entregar Quiz' },
     { id: 3, key: 'TESTE', name: 'Entregar Teste' },
-    { id: 4, key: 'MATERIAL', name: 'Material de estudo' },
+    { id: 4, key: 'MATERIAL', name: 'Entregar Material de estudo' },
   ];
 
   const handleSubmit = useCallback(
@@ -172,27 +169,11 @@ const NewActionModal: React.FC<IModalProps> = ({
     setContext(context);
   }
 
-  function handleSelectedContent(event: ChangeEvent<HTMLSelectElement>) {
-    const content = event.target.value;
-
-    loadContents(content);
-  }
-
-  function handleSelectedStudent(event: ChangeEvent<HTMLSelectElement>) {
-    const selectedStudents = event.target.value;
-  }
-
   // eslint-disable-next-line no-shadow
   async function loadActions(context: string): Promise<void> {
     const response = await api.get(`categoryAction?context=${context}`);
 
     setActions(response.data.categoryActions);
-  }
-
-  async function loadContents(content: string): Promise<void> {
-    const response = await api.get(`contents?type=${content}`);
-
-    setContents(response.data);
   }
 
   useEffect(() => {
@@ -213,12 +194,6 @@ const NewActionModal: React.FC<IModalProps> = ({
     });
   }, [selectedTeacher]);
 
-  // useEffect(() => {
-  //   api.get(`student_lesson?lesson=${selectLesson?.id}`).then(response => {
-  //     setStudents(response.data);
-  //   });
-  // }, [selectLesson]);
-
   useEffect(() => {
     api.get(`lesson?subject=${selectSubject?.id}`).then(response => {
       setLessons(response.data);
@@ -233,11 +208,19 @@ const NewActionModal: React.FC<IModalProps> = ({
       });
   }, [selectLesson]);
 
-  console.log(selectedStudentLessons);
+  function handleSelectedContent(event: ChangeEvent<HTMLSelectElement>) {
+    const content = event.target.value;
 
-  // useEffect(() => {
-  //   setStudentLessons(selectLesson?.student_lesson);
-  // }, [selectLesson]);
+    loadContents(content);
+  }
+
+  async function loadContents(content: string): Promise<void> {
+    const response = await api.get(
+      `contents?type=${content}&={selectLesson?.id}`,
+    );
+
+    setContents(response.data);
+  }
 
   const handleUpload = file => {
     setSelectedFile(file);
@@ -263,7 +246,7 @@ const NewActionModal: React.FC<IModalProps> = ({
             />
 
             <SelectCategoryAction
-              title="História"
+              title="Contexto"
               data={actions}
               value={selectAction}
               // eslint-disable-next-line react/jsx-no-bind
@@ -308,19 +291,6 @@ const NewActionModal: React.FC<IModalProps> = ({
             ) : (
               <></>
             )}
-            {context === 'FEEDBACK' ? (
-              <div className=" space-y-2">
-                <List data={students} />
-                <button
-                  className="bg-indigo-600 p-2 text-white rounded hover:bg-indigo-800"
-                  type="button"
-                >
-                  Atualizar Nota
-                </button>{' '}
-              </div>
-            ) : (
-              <></>
-            )}
           </div>
 
           {/* Lado direito */}
@@ -338,7 +308,6 @@ const NewActionModal: React.FC<IModalProps> = ({
                   change={setSelectedTeacher}
                 />
               </div>
-
               <div className="w-full">
                 <SelectCustomSubjects
                   title="Disciplinas/Turma"
@@ -347,7 +316,6 @@ const NewActionModal: React.FC<IModalProps> = ({
                   change={setSelectSubject}
                 />
               </div>
-
               <div className="w-full">
                 <SelectCustomLesson
                   title="Selecione a Aula"
@@ -355,40 +323,6 @@ const NewActionModal: React.FC<IModalProps> = ({
                   v={selectLesson}
                   change={setSelectLesson}
                 />
-              </div>
-
-              <div className="w-full">
-                <SelectCustomStudentLesson
-                  title="Alunos/Aula"
-                  data={studentLessons}
-                  v={selectedStudentLessons}
-                  change={setSelectedStudentLessons}
-                />
-              </div>
-
-              {/* {context === 'RECOMENDACAO' || context === 'REVISAO' ? (
-                <div className=" space-y-2">
-                  <List data={students} />
-                  <button
-                    className="bg-indigo-600 p-2 text-white rounded hover:bg-indigo-800"
-                    type="button"
-                  >
-                    Atualizar Nota
-                  </button>{' '}
-                </div>
-              ) : (
-                <></>
-              )} */}
-
-              <div className="flex flex-row space-x-2">
-                <div className="">
-                  {/* <SelectStudent
-                  title="Selecione o aluno"
-                  data={subjectStudents}
-                  value={selectStudent}
-                  change={handleSelectedStudent}
-                /> */}
-                </div>
               </div>
 
               <div className="flex flex-col">
@@ -404,7 +338,84 @@ const NewActionModal: React.FC<IModalProps> = ({
                 />
               </div>
 
-              {/* {context === 'FEEDBACK' ? (
+              <div className="  space-y-2 ">
+                {context === 'REVISAO' || context === 'RECOMENDACAO' ? (
+                  <Select
+                    title="Ação"
+                    data={typeActions}
+                    value={selectTypeContent}
+                    change={handleSelectedContent}
+                  />
+                ) : (
+                  <></>
+                )}
+                <div className="w-full">
+                  <SelectCustomContent
+                    title="Escolha o conteúdo"
+                    data={contents}
+                    v={selectedContent}
+                    change={setSelectedContent}
+                  />
+                </div>
+                {/* {context === 'FEEDBACK' ? (
+              <div className=" space-y-2">
+                <List data={students} />
+                <button
+                  className="bg-indigo-600 p-2 text-white rounded hover:bg-indigo-800"
+                  type="button"
+                >
+                  Atualizar Nota
+                </button>{' '}
+              </div>
+            ) : (
+              <></>
+            )} */}
+                {/* <div className="w-full">
+                <SelectCustomStudentLesson
+                  title="Alunos/Aula"
+                  data={studentLessons}
+                  v={selectedStudentLessons}
+                  change={setSelectedStudentLessons}
+                />
+              </div> */}
+
+                {/*
+              <div className=" space-y-2">
+                <List data={studentLessons} title="Aulas atribuidas" />
+                <button
+                  className="bg-indigo-600 p-2 text-white rounded hover:bg-indigo-800"
+                  type="button"
+                >
+                  Atualizar Nota
+                </button>{' '} 
+              </div> */}
+
+                {/* {context === 'RECOMENDACAO' || context === 'REVISAO' ? (
+                <div className=" space-y-2">
+                  <List data={students} />
+                  <button
+                    className="bg-indigo-600 p-2 text-white rounded hover:bg-indigo-800"
+                    type="button"
+                  >
+                    Atualizar Nota
+                  </button>{' '}
+                </div>
+              ) : (
+                <></>
+              )} */}
+                {/*
+              <div className="flex flex-row space-x-2">
+                <div className="">
+                 <SelectStudent
+                  title="Selecione o aluno"
+                  data={subjectStudents}
+                  value={selectStudent}
+                  change={handleSelectedStudent}
+                /> 
+                </div>
+              </div>
+              */}
+                {/* {context === 'FEEDBACK' ? (
                 <SelectCustomPerson
                   seletedValue={selectedStudent}
                   setSelectedValue={setSelectedStudent}
@@ -414,21 +425,7 @@ const NewActionModal: React.FC<IModalProps> = ({
               ) : (
                 <></>
               )} */}
-
-              <div className="  space-y-2 ">
-                {context === 'REVISAO' || context === 'RECOMENDACAO' ? (
-                  <>
-                    <Select
-                      title="Ação"
-                      data={typeActions}
-                      value={selectTypeContent}
-                      change={handleSelectedContent}
-                    />
-                    <Upload onFileUploaded={setSelectedFile} />
-                  </>
-                ) : (
-                  <></>
-                )}
+                {/* <Upload onFileUploaded={setSelectedFile} /> */}
               </div>
             </div>
           </div>
