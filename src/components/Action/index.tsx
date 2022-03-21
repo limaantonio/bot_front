@@ -38,7 +38,6 @@ const Action: React.FC<IProps> = ({
       active: !isAvailable,
     });
     setIsAvailable(!isAvailable);
-    console.log(isAvailable);
   }
 
   function setEditingaction(): void {
