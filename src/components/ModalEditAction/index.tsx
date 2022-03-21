@@ -11,7 +11,7 @@ interface IAction {
   deadline: number;
   passing_score: number;
   dt_complete_class: Date;
-  available: boolean;
+  active: boolean;
 }
 
 interface IModalProps {
@@ -27,6 +27,7 @@ interface IActionData {
   deadline: number;
   passing_score: number;
   dt_complete_class: Date;
+  active: boolean;
 }
 
 const ModalEditAction: React.FC<IModalProps> = ({

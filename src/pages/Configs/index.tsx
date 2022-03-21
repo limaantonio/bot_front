@@ -15,7 +15,7 @@ interface IAction {
   deadline: number;
   passing_score: number;
   dt_complete_class: Date;
-  available: boolean;
+  active: boolean;
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -28,7 +28,7 @@ function Configs() {
     deadline: 0,
     passing_score: 0,
     dt_complete_class: new Date(),
-    available: true,
+    active: true,
   });
   const [editModalOpen, setEditModalOpen] = useState(false);
 
@@ -40,9 +40,7 @@ function Configs() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     // eslint-disable-next-line no-shadow
     async function loadActions(id: any): Promise<void> {
-      const response = await api.get(
-        `action?active=${true}&category_action_id=${id}`,
-      );
+      const response = await api.get(`action?category_action_id=${id}`);
 
       setActions(response.data.listActions);
     }
@@ -60,14 +58,14 @@ function Configs() {
       return {
         ...action,
         id: editingAction.id,
-        available: editingAction.available,
+        available: editingAction.active,
       };
     });
     setActions(newActionList);
     await api.put(`/action/${editingAction.id}`, {
       ...action,
       id: editingAction.id,
-      available: editingAction.available,
+      available: editingAction.active,
     });
   }
 

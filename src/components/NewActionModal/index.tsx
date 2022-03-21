@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable camelcase */
 /* eslint-disable jsx-a11y/role-has-required-aria-props */
 /* eslint-disable jsx-a11y/label-has-associated-control */
@@ -13,6 +14,14 @@ import React, {
   ChangeEvent,
   useEffect,
 } from 'react';
+import {
+  AiFillFileImage,
+  AiFillFilePdf,
+  AiFillFileText,
+  AiOutlineLink,
+} from 'react-icons/ai';
+import { MdFormatListBulleted } from 'react-icons/md';
+import { GrDocument } from 'react-icons/gr';
 import Input from '../Input';
 import Modal from '../Modal';
 import api from '../../services/api';
@@ -23,6 +32,7 @@ import SelectCustomPerson from '../SelectCustomPerson';
 import SelectCustomSubjects from '../SelectCustomSubjects';
 import SelectCustomLesson from '../SelectCustomLesson';
 import SelectCustomContent from '../SelectCustomContent';
+import Tooltip from '../Tooltip';
 
 interface IAction {
   id: string;
@@ -88,6 +98,7 @@ interface IContent {
   id: string;
   name: string;
   type: string;
+  type_file: string;
   content_url: string;
   lesson: ILesson;
 }
@@ -279,7 +290,8 @@ const NewActionModal: React.FC<IModalProps> = ({
               <></>
             )}
 
-            {context === 'RECOMENDACAO' ? (
+            {context === 'RECOMENDACAO' ||
+            selectAction === 'dd05c852-37a7-4380-b23b-89d600dea983' ? (
               <div className="flex flex-col">
                 <span className="font-medium text-gray-700">Qual a nota?</span>
                 <Input
@@ -308,6 +320,7 @@ const NewActionModal: React.FC<IModalProps> = ({
                   change={setSelectedTeacher}
                 />
               </div>
+
               <div className="w-full">
                 <SelectCustomSubjects
                   title="Disciplinas/Turma"
@@ -340,23 +353,71 @@ const NewActionModal: React.FC<IModalProps> = ({
 
               <div className="  space-y-2 ">
                 {context === 'REVISAO' || context === 'RECOMENDACAO' ? (
-                  <Select
-                    title="Ação"
-                    data={typeActions}
-                    value={selectTypeContent}
-                    change={handleSelectedContent}
-                  />
+                  <>
+                    <Select
+                      title="Ação"
+                      data={typeActions}
+                      value={selectTypeContent}
+                      change={handleSelectedContent}
+                    />
+                    <div className="w-full">
+                      <SelectCustomContent
+                        title="Escolha o conteúdo"
+                        data={contents}
+                        v={selectedContent}
+                        change={setSelectedContent}
+                      />
+                    </div>
+                    <div className="flex flex-col items-center p-2 rounded border space-y-2 bg-gray-100">
+                      <Tooltip
+                        text="Visualizar arquivo"
+                        className="w-1/6 h-1/6"
+                      >
+                        <a
+                          className="bg-gray-500"
+                          href={selectedContent?.content_url}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {selectedContent?.type_file === 'PDF' ? (
+                            <>
+                              <AiFillFilePdf className="text-red-600 w-full h-full" />
+                              <p className="text-gray-400 font-light text-center">
+                                {selectedContent.type_file}
+                              </p>
+                            </>
+                          ) : selectedContent?.type_file === 'DOC' ? (
+                            <>
+                              <AiFillFileText className="text-blue-600 w-full h-full" />{' '}
+                              <p className="text-gray-400 font-light text-center">
+                                {selectedContent.type_file}
+                              </p>
+                            </>
+                          ) : selectedContent?.type_file === 'IMAGE' ? (
+                            <>
+                              <AiFillFileImage className="text-green-600 w-full h-full" />
+                              <p className="text-gray-400 font-light text-center">
+                                {selectedContent.type_file}
+                              </p>
+                            </>
+                          ) : selectedContent?.type_file === 'LINK' ? (
+                            <AiOutlineLink className="text-indigo-500 w-full h-full" />
+                          ) : (
+                            <>
+                              <AiFillFileText className="text-gray-400 w-full h-full" />
+                              <p className="text-gray-400 font-light text-center">
+                                Sem conteúdo
+                              </p>
+                            </>
+                          )}
+                        </a>
+                      </Tooltip>
+                    </div>
+                  </>
                 ) : (
                   <></>
                 )}
-                <div className="w-full">
-                  <SelectCustomContent
-                    title="Escolha o conteúdo"
-                    data={contents}
-                    v={selectedContent}
-                    change={setSelectedContent}
-                  />
-                </div>
+
                 {/* {context === 'FEEDBACK' ? (
               <div className=" space-y-2">
                 <List data={students} />

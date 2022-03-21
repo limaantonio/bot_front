@@ -28,7 +28,7 @@ export default function Dropdown() {
               <img
                 className="w-10 h-10 rounded-full"
                 alt=""
-                src="https://mylms.s3.amazonaws.com/1067479ce8e86f2a06170b517e673f29-Necio-De-Lima-Veras.jpg"
+                src="https://bucket-my-lms.s3.sa-east-1.amazonaws.com/1227d5fe00ef628fef2ce32a6e4ddec1-Necio-De-Lima-Veras.jpg"
               />
               <span className="text-white">Professor</span>
               <FiChevronDown

@@ -14,7 +14,7 @@ interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
   icon?: React.ComponentType<IconBaseProps>;
 }
 
-const Input: React.FC<IInputProps> = ({ name, icon: Icon, ...rest }) => {
+const Input: React.FC<IInputProps> = ({ name, icon: Icon, type, ...rest }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [isFocused, setIsFocused] = useState(false);
@@ -45,6 +45,7 @@ const Input: React.FC<IInputProps> = ({ name, icon: Icon, ...rest }) => {
       onFocus={handleInputFocus}
       onBlur={handleInputBlur}
       defaultValue={defaultValue}
+      type={type}
       ref={inputRef}
       {...rest}
     />
