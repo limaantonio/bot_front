@@ -20,7 +20,7 @@ interface HeaderProps {
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function DropdownDetail({
   onOpenNewTransactionModal,
-}: HeaderProps) {
+}: HeaderProps): JSX.Element {
   return (
     <Menu as="div" className="relative inline-block text-left z-10">
       {({ open }) => (

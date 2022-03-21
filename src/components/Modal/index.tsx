@@ -20,13 +20,13 @@ interface IModalProps {
   submit: string;
 }
 
-const Modal: React.FC<IModalProps> = ({
+function Modal({
   children,
   isOpen,
   setIsOpen,
   title,
   submit,
-}) => {
+}: IModalProps): JSX.Element {
   const [modalStatus, setModalStatus] = useState(isOpen);
 
   useEffect(() => {
@@ -90,6 +90,6 @@ const Modal: React.FC<IModalProps> = ({
       </ReactModal>
     </div>
   );
-};
+}
 
 export default Modal;

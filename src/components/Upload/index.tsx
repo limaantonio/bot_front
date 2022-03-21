@@ -6,7 +6,7 @@ import Dropzone, { useDropzone } from 'react-dropzone';
 import { FaCloudUploadAlt } from 'react-icons/fa';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default function Upload({ onFileUploaded }) {
+export default function Upload({ onFileUploaded }): JSX.Element {
   const [fileNames, setFileNames] = useState([]);
   const [selectedFileURL, setSelectedFileURL] = useState('');
 

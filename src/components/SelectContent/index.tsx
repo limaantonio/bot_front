@@ -15,7 +15,7 @@ interface IProps {
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-function SelectContent({ title, data, value, change }: IProps) {
+function SelectContent({ title, data, value, change }: IProps): JSX.Element {
   return (
     <div className="flex flex-col">
       <span className="font-medium">{title}</span>

@@ -15,7 +15,7 @@ interface ICategoryActionProps {
   action: ICategoryAction;
 }
 
-export function CategoryAction({ action }: ICategoryActionProps) {
+export function CategoryAction({ action }: ICategoryActionProps): JSX.Element {
   const [actionsNumber, setActionsNumber] = useState(0);
 
   useEffect(() => {

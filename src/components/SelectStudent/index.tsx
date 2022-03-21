@@ -23,7 +23,7 @@ interface IProps {
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-function SelectStudent({ title, data, value, change }: IProps) {
+function SelectStudent({ title, data, value, change }: IProps): JSX.Element {
   return (
     <div className="flex flex-col">
       <span className="font-medium text-gray-700">{title}</span>

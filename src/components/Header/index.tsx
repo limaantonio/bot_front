@@ -14,7 +14,7 @@ interface IAction {
   available: boolean;
 }
 
-const Header: React.FC = () => {
+function Header(): JSX.Element {
   const [actions, setActions] = useState<IAction[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -74,6 +74,6 @@ const Header: React.FC = () => {
       </div>
     </header>
   );
-};
+}
 
 export default Header;

@@ -20,7 +20,7 @@ function useQuery() {
   return React.useMemo(() => new URLSearchParams(search), [search]);
 }
 
-const Dashboard: React.FC = () => {
+function Dashboard(): JSX.Element {
   const [isNewTrasactionModalOpen, setIsNewTrasactionModalOpen] =
     useState(false);
 
@@ -55,6 +55,6 @@ const Dashboard: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Dashboard;

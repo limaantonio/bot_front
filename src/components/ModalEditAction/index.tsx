@@ -30,12 +30,12 @@ interface IActionData {
   active: boolean;
 }
 
-const ModalEditAction: React.FC<IModalProps> = ({
+function ModalEditAction({
   isOpen,
   setIsOpen,
   editingAction,
   handleUpdateAction,
-}) => {
+}: IModalProps): JSX.Element {
   const formRef = useRef<FormHandles>(null);
 
   const handleSubmit = useCallback(
@@ -94,6 +94,6 @@ const ModalEditAction: React.FC<IModalProps> = ({
       </Form>
     </Modal>
   );
-};
+}
 
 export default ModalEditAction;

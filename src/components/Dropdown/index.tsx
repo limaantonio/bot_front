@@ -13,7 +13,7 @@ function classNames(...classes: string[]) {
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default function Dropdown() {
+export default function Dropdown(): JSX.Element {
   return (
     <Menu as="div" className="relative inline-block text-left">
       {({ open }) => (

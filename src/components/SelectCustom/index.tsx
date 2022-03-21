@@ -14,7 +14,7 @@ export default function SelectCustom({
   setSelectedValue,
   data,
   title,
-}) {
+}): JSX.Element {
   return (
     <Listbox value={seletedValue} onChange={setSelectedValue}>
       {({ open }) => (

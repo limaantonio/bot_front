@@ -21,11 +21,11 @@ interface IProps {
   handleEditAction: (action: IAction) => void;
 }
 
-const Action: React.FC<IProps> = ({
+function Action({
   action,
   handleDelete,
   handleEditAction,
-}: IProps) => {
+}: IProps): JSX.Element {
   const [isAvailable, setIsAvailable] = useState(action.active);
 
   async function toggleAvailable(): Promise<void> {
@@ -93,6 +93,6 @@ const Action: React.FC<IProps> = ({
       </div>
     </Container>
   );
-};
+}
 
 export default Action;

@@ -14,7 +14,7 @@ export default function SelectCustomTeacher({
   setSelectedValue,
   data,
   title,
-}) {
+}): JSX.Element {
   return (
     <Listbox value={seletedValue} onChange={setSelectedValue}>
       {({ open }) => (

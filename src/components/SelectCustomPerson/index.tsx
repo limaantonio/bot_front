@@ -27,7 +27,12 @@ interface IProps {
   change: any;
 }
 
-export default function SelectCustomPerson({ title, data, change, v }: IProps) {
+export default function SelectCustomPerson({
+  title,
+  data,
+  change,
+  v,
+}: IProps): JSX.Element {
   return (
     <Listbox value={v} onChange={change}>
       {({ open }) => (

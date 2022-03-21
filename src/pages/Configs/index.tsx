@@ -20,7 +20,7 @@ interface IAction {
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-function Configs() {
+function Configs(): JSX.Element {
   const [actions, setActions] = useState<IAction[]>([]);
   const [editingAction, setEditingAction] = useState<IAction>({
     id: 0,

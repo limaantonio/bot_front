@@ -8,7 +8,7 @@ import { FiHome } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import Dropdown from '../Dropdown';
 
-function Nav() {
+function Nav(): JSX.Element {
   const [active, setActive] = useState(false);
   const handleClick = () => {
     setActive(!active);

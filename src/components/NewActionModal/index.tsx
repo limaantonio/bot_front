@@ -103,11 +103,11 @@ interface IContent {
   lesson: ILesson;
 }
 
-const NewActionModal: React.FC<IModalProps> = ({
+function NewActionModal({
   isOpen,
   setIsOpen,
   handleAddAction,
-}) => {
+}: IModalProps): JSX.Element {
   const formRef = useRef<FormHandles>(null);
 
   const [teachers, setTeachers] = useState<ITeacher[]>([]);
@@ -494,6 +494,6 @@ const NewActionModal: React.FC<IModalProps> = ({
       </Form>
     </Modal>
   );
-};
+}
 
 export default NewActionModal;

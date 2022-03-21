@@ -30,7 +30,7 @@ export default function SelectCustomSubjects({
   data,
   change,
   v,
-}: IProps) {
+}: IProps): JSX.Element {
   return (
     <Listbox value={v} onChange={change}>
       {({ open }) => (
