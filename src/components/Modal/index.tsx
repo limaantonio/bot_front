@@ -8,7 +8,7 @@ interface IActionPlate {
   image: string;
   price: string;
   description: string;
-  available: boolean;
+  active: boolean;
 }
 
 interface IModalProps {
@@ -69,23 +69,6 @@ function Modal({
           </div>
 
           {children}
-
-          <div className="w-full flex flex-row justify-end space-x-2 border-t px-6 py-2">
-            <button
-              className="px-8 p-2 bg-gray-200 hover:bg-gray-300 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 rounded-md text-white"
-              type="submit"
-              onClick={() => setIsOpen()}
-            >
-              <p className="text-gray-600">Cancelar</p>
-            </button>
-            <button
-              className="px-8 p-2 bg-indigo-600 hover:bg-indigo-700 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 rounded-md text-white"
-              type="submit"
-              data-testid={submit}
-            >
-              <p className="text">Salvar</p>
-            </button>
-          </div>
         </div>
       </ReactModal>
     </div>

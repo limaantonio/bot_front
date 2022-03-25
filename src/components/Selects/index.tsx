@@ -2,8 +2,8 @@ import React, { ChangeEvent } from 'react';
 
 interface IType {
   id: number;
-  key: string;
-  name: string;
+  value: string;
+  label: string;
 }
 
 interface IProps {
@@ -16,7 +16,7 @@ interface IProps {
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-function Select({ title, data, value, change }: IProps): JSX.Element {
+function Selects({ title, data, value, change }: IProps): JSX.Element {
   return (
     <div className="flex flex-col text-sm">
       <span className="font-medium text-gray-700">{title}</span>
@@ -40,9 +40,9 @@ function Select({ title, data, value, change }: IProps): JSX.Element {
           <option
             className="bg-white text-black"
             key={type.id}
-            value={type.key}
+            value={type.value}
           >
-            {type.name}
+            {type.label}
           </option>
         ))}
       </select>
@@ -50,4 +50,4 @@ function Select({ title, data, value, change }: IProps): JSX.Element {
   );
 }
 
-export { Select };
+export { Selects };

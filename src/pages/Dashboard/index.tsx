@@ -1,10 +1,16 @@
+/* eslint-disable react/jsx-no-bind */
+/* eslint-disable import/extensions */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { FormHandles } from '@unform/core';
+import { Form } from '@unform/web';
 import { CategoryAction } from '../../components/CategoryAction';
+
 import Header from '../../components/Header';
 import Nav from '../../components/Nav';
 import api from '../../services/api';
+import Select2 from '../../components/Select2';
 
 interface ICategoryAction {
   id: number;
@@ -19,6 +25,12 @@ function useQuery() {
 
   return React.useMemo(() => new URLSearchParams(search), [search]);
 }
+
+const options = [
+  { value: 'chocolate', label: 'Chocolate' },
+  { value: 'strawberry', label: 'Strawberry' },
+  { value: 'vanilla', label: 'Vanilla' },
+];
 
 function Dashboard(): JSX.Element {
   const [isNewTrasactionModalOpen, setIsNewTrasactionModalOpen] =

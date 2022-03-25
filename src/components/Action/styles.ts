@@ -1,44 +1,12 @@
 import styled, { css } from 'styled-components';
 
 interface IActionPlateProps {
-  available: boolean;
+  active: boolean;
 }
 
 export const Container = styled.div<IActionPlateProps>`
   section.footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    padding: 20px 30px;
-
-    border-radius: 0px 0px 8px 8px;
-
-    div.icon-container {
-      display: flex;
-
-      button {
-        background: #fff;
-        padding: 10px;
-        border-radius: 8px;
-        display: flex;
-        border: none;
-        transition: 0.1s;
-
-        svg {
-          color: #3d3d4d;
-        }
-
-        & + button {
-          margin-left: 6px;
-        }
-      }
-    }
-
     div.availability-container {
-      display: flex;
-      align-items: center;
-
       p {
         color: #3d3d4d;
       }

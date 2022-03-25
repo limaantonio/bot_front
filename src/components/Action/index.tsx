@@ -12,6 +12,8 @@ interface IAction {
   deadline: number;
   passing_score: number;
   dt_complete_class: Date;
+  student_lesson: string;
+  category_action: string;
   active: boolean;
 }
 
@@ -45,27 +47,45 @@ function Action({
   }
 
   return (
-    <Container available={isAvailable}>
+    <Container active={isAvailable}>
       <div className=" bg-white text-sm p-4 flex flex-row items-center  relative border font-light h-14">
-        <span className="w-3/12 text-left">{action.title}</span>
-        <span className="w-3/12 text-left">{action.deadline}</span>
-        <span className="w-3/12 text-center">{action.passing_score}</span>
-        <span className="w-3/12 text-center">
+        <span className="w-3/12 text-center">{action.title}</span>
+        <span className="w-2/12 text-center">{action.deadline}</span>
+        <span className="w-2/12 text-center">fdfadfsd</span>
+        <span className="w-2/12 text-center">
           {format(new Date(action.dt_complete_class), 'yyyy-MM-dd')}
         </span>
-
-        <section className="footer">
-          <div className="w-3/12 text-center space-x-2">
-            <button
-              type="button"
-              className="bg-gray-200 rounded-full p-2 shadow-sm hover:bg-blue-400 duration-300"
-              onClick={() => setEditingaction()}
-              data-testid={`edit-action-${action.id}`}
-            >
-              <FiEdit3 size={20} />
-            </button>
-
-            {/* <button
+        <div className="w-1/12 text-center space-x-2  flex flex-row items-center justify-center">
+          <button
+            type="button"
+            className="bg-gray-200 rounded-full p-2 shadow-sm hover:bg-blue-400 duration-300"
+            onClick={() => setEditingaction()}
+            data-testid={`edit-action-${action.id}`}
+          >
+            <FiEdit3 size={20} />
+          </button>
+        </div>
+        <div className="w-2/12 text-center space-x-2  flex flex-row items-center justify-center">
+          <section className="footer ">
+            <div className="availability-container flex flex-row items-center space-x-2">
+              <label
+                htmlFor={`available-switch-${action.id}`}
+                className="switch"
+              >
+                <input
+                  id={`available-switch-${action.id}`}
+                  type="checkbox"
+                  checked={isAvailable}
+                  onChange={toggleAvailable}
+                  data-testid={`change-status-action-${action.id}`}
+                />
+                <span className="slider" />
+              </label>
+              <p>{isAvailable ? 'Ativo' : 'Inativo'}</p>
+            </div>
+          </section>
+        </div>
+        {/* <button
               type="button"
               className="bg-gray-200 rounded-full p-2 shadow-sm hover:bg-red-400 duration-300"
               onClick={() => handleDelete(action.id)}
@@ -73,23 +93,6 @@ function Action({
             >
               <FiTrash size={20} />
             </button> */}
-          </div>
-
-          <div className="availability-container">
-            <p>{isAvailable ? 'Disponível' : 'Indisponível'}</p>
-
-            <label htmlFor={`available-switch-${action.id}`} className="switch">
-              <input
-                id={`available-switch-${action.id}`}
-                type="checkbox"
-                checked={isAvailable}
-                onChange={toggleAvailable}
-                data-testid={`change-status-action-${action.id}`}
-              />
-              <span className="slider" />
-            </label>
-          </div>
-        </section>
       </div>
     </Container>
   );

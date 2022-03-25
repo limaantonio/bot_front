@@ -11,13 +11,15 @@ interface IAction {
   deadline: number;
   passing_score: number;
   dt_complete_class: Date;
+  student_lesson: string;
+  category_action: string;
   active: boolean;
 }
 
 interface IModalProps {
   isOpen: boolean;
   setIsOpen: () => void;
-  handleUpdateAction: (Action: Omit<IAction, 'id' | 'available'>) => void;
+  handleUpdateAction: (Action: Omit<IAction, 'id' | 'active'>) => void;
   editingAction: IAction;
 }
 
@@ -27,6 +29,8 @@ interface IActionData {
   deadline: number;
   passing_score: number;
   dt_complete_class: Date;
+  student_lesson: string;
+  category_action: string;
   active: boolean;
 }
 

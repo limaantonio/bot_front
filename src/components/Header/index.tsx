@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable react/jsx-no-bind */
 import React, { useEffect, useState } from 'react';
 import { SiProbot } from 'react-icons/si';
@@ -9,9 +10,11 @@ import NewActionModal from '../NewActionModal';
 
 interface IAction {
   id: number;
-  name: string;
-  description: string;
-  available: boolean;
+  deadline: number;
+  title: string;
+  student_lesson: string;
+  category_action: string;
+  active: boolean;
 }
 
 function Header(): JSX.Element {
@@ -28,17 +31,21 @@ function Header(): JSX.Element {
   }, []);
 
   async function handleAddAction(
-    action: Omit<IAction, 'id' | 'available'>,
+    action: Omit<IAction, 'id' | 'active'>,
   ): Promise<void> {
     try {
       const newAction: IAction = {
         id: actions[actions.length - 1]
           ? actions[actions.length - 1].id + 1
           : 1,
-        name: action.name,
-        description: action.description,
-        available: true,
+        deadline: action.deadline,
+        title: action.title,
+        student_lesson: action.student_lesson,
+        category_action: action.category_action,
+
+        active: true,
       };
+      console.log(newAction);
       await api.post('/action', newAction);
       setActions([...actions, newAction]);
     } catch (err) {

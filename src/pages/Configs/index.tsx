@@ -15,6 +15,8 @@ interface IAction {
   deadline: number;
   passing_score: number;
   dt_complete_class: Date;
+  student_lesson: string;
+  category_action: string;
   active: boolean;
 }
 
@@ -28,6 +30,8 @@ function Configs(): JSX.Element {
     deadline: 0,
     passing_score: 0,
     dt_complete_class: new Date(),
+    student_lesson: '',
+    category_action: '',
     active: true,
   });
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -49,7 +53,7 @@ function Configs(): JSX.Element {
   }, [id]);
 
   async function handleUpdateAction(
-    action: Omit<IAction, 'id' | 'available'>,
+    action: Omit<IAction, 'id' | 'active'>,
   ): Promise<void> {
     const newActionList = actions.map(cAction => {
       if (cAction.id !== editingAction.id) {
@@ -58,14 +62,14 @@ function Configs(): JSX.Element {
       return {
         ...action,
         id: editingAction.id,
-        available: editingAction.active,
+        active: editingAction.active,
       };
     });
     setActions(newActionList);
     await api.put(`/action/${editingAction.id}`, {
       ...action,
       id: editingAction.id,
-      available: editingAction.active,
+      active: editingAction.active,
     });
   }
 
@@ -101,11 +105,12 @@ function Configs(): JSX.Element {
         <h1 className="font-semibold items-">Suas Configurações</h1>
 
         <div className="bg-white flex flex-row items-center p-4 mt-10 h-14">
-          <h2 className="w-3/12 text-left">Conteúdo</h2>
-          <h1 className="w-3/12 text-left">Dias</h1>
-          <h1 className="w-3/12 text-center">Nota de Corte</h1>
-          <h1 className="w-3/12 text-center">Data para entrega</h1>
-          <h1 className="w-3/12 text-center">Editar/Ativar</h1>
+          <h2 className="w-3/12 text-center">Conteúdo</h2>
+          <h1 className="w-2/12 text-center">Dias</h1>
+          <h1 className="w-2/12 text-center">Nota de Corte</h1>
+          <h1 className="w-2/12 text-center">Data para entrega</h1>
+          <h1 className="w-1/12 text-center">Editar</h1>
+          <h1 className="w-2/12 text-center">Ativar</h1>
         </div>
 
         <div className="overflow-scroll">
