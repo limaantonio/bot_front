@@ -34,7 +34,7 @@ interface IAction {
   id: string;
   deadline: number;
   title: string;
-  student_lesson: string;
+  student_task: string;
   category_action: string;
 }
 
@@ -49,7 +49,7 @@ interface ILesson {
 interface ICreateActionData {
   deadline: number;
   title: string;
-  student_lesson: string;
+  student_task: string;
   category_action: string;
 }
 
@@ -80,7 +80,7 @@ interface ISubjectStudent {
   student: IStudent;
 }
 
-interface IStudentLesson {
+interface IStudentTask {
   id: string;
   status: string;
   score: number;
@@ -102,7 +102,7 @@ interface ITeacher {
   img_url: string;
 }
 
-interface IContent {
+interface ITask {
   id: string;
   name: string;
   type: string;
@@ -130,12 +130,12 @@ function NewActionModal({
   const [selectCategoryActions, setSelectCategoryActions] =
     useState<ICreateAction>();
 
-  const [studentLessons, setStudentLessons] = useState();
-  const [selectedStudentLessons, setSelectedStudentLessons] =
-    useState<IStudentLesson>();
+  const [studentTasks, setStudentTasks] = useState();
+  const [selectedStudentTasks, setSelectedStudentTaks] =
+    useState<IStudentTask>();
 
-  const [contents, setContents] = useState<IContent[]>([]);
-  const [selectedContent, setSelectedContent] = useState<IContent>();
+  const [contents, setContents] = useState<ITask[]>([]);
+  const [selectedContent, setSelectedContent] = useState<ITask>();
 
   const [students, setStudents] = useState<IStudent[]>([]);
   const [selectStudent, setSelectStudent] = useState<IStudent>();
@@ -253,12 +253,14 @@ function NewActionModal({
   console.log(selectTypeContext);
 
   useEffect(() => {
-    loadStudentLessons();
+    loadStudentTasks();
   }, [selectLesson]);
 
-  async function loadStudentLessons() {
+  console.log(selectLesson);
+
+  async function loadStudentTasks() {
     const res = await api.get(
-      `student_lesson?lesson=${selectLesson?.value}&status=${'PENDENTE'}`,
+      `student_task?lesson=${selectLesson?.value}&status=${'PENDENTE'}`,
     );
     const { data } = res;
 
@@ -267,7 +269,7 @@ function NewActionModal({
       label: d.status,
     }));
 
-    setStudentLessons(options);
+    setStudentTasks(options);
   }
 
   useEffect(() => {
@@ -275,7 +277,7 @@ function NewActionModal({
   }, []);
 
   async function loadContents(): Promise<void> {
-    const response = await api.get(`contents?type=${title.name}`);
+    const response = await api.get(`tasks?type=${title.name}`);
 
     setContents(response.data);
   }
@@ -399,10 +401,10 @@ function NewActionModal({
                 <div className="w-1/2">
                   <span>Status</span>
                   <Select2
-                    name="student_lesson.id"
-                    options={studentLessons}
-                    selectedOption={selectedStudentLessons}
-                    setSelectedOption={setSelectedStudentLessons}
+                    name="student_task.id"
+                    options={studentTasks}
+                    selectedOption={selectedStudentTasks}
+                    setSelectedOption={setSelectedStudentTaks}
                   />
                 </div>
               </div>

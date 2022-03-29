@@ -12,7 +12,7 @@ interface IAction {
   deadline: number;
   passing_score: number;
   dt_complete_class: Date;
-  student_lesson: string;
+  student_task: string;
   category_action: string;
   active: boolean;
 }

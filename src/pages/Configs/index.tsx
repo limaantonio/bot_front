@@ -15,7 +15,7 @@ interface IAction {
   deadline: number;
   passing_score: number;
   dt_complete_class: Date;
-  student_lesson: string;
+  student_task: string;
   category_action: string;
   active: boolean;
 }
@@ -30,7 +30,7 @@ function Configs(): JSX.Element {
     deadline: 0,
     passing_score: 0,
     dt_complete_class: new Date(),
-    student_lesson: '',
+    student_task: '',
     category_action: '',
     active: true,
   });

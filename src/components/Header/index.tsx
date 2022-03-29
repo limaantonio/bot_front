@@ -12,7 +12,7 @@ interface IAction {
   id: number;
   deadline: number;
   title: string;
-  student_lesson: string;
+  student_task: string;
   category_action: string;
   active: boolean;
 }
@@ -40,7 +40,7 @@ function Header(): JSX.Element {
           : 1,
         deadline: action.deadline,
         title: action.title,
-        student_lesson: action.student_lesson,
+        student_task: action.student_task,
         category_action: action.category_action,
 
         active: true,
