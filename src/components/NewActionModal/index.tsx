@@ -8,7 +8,13 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { FormHandles } from '@unform/core';
-import React, { useCallback, useState, ChangeEvent, useEffect } from 'react';
+import React, {
+  useCallback,
+  useState,
+  ChangeEvent,
+  useEffect,
+  useRef,
+} from 'react';
 import {
   AiFillFileImage,
   AiFillFilePdf,
@@ -29,12 +35,15 @@ import SelectCustomLesson from '../SelectCustomLesson';
 import SelectCustomContent from '../SelectCustomContent';
 import Tooltip from '../Tooltip';
 import Select2 from '../Select2';
+import Upload from '../Upload';
 
 interface IAction {
   id: string;
   deadline: number;
   title: string;
-  student_task: string;
+  task: string;
+  file: File;
+
   category_action: string;
 }
 
@@ -47,9 +56,11 @@ interface ILesson {
 }
 
 interface ICreateActionData {
-  deadline: number;
+  deadline: string;
   title: string;
-  student_task: string;
+  task: string;
+  file: File;
+
   category_action: string;
 }
 
@@ -63,7 +74,7 @@ interface ICreateAction {
 interface IModalProps {
   isOpen: boolean;
   setIsOpen: () => void;
-  handleAddAction: (action: Omit<IAction, 'id' | 'active'>) => void;
+  // handleAddAction: (action: Omit<IAction, 'id' | 'active'>) => void;
 }
 
 interface ISubject {
@@ -83,6 +94,8 @@ interface ISubjectStudent {
 interface IStudentTask {
   id: string;
   status: string;
+  file: string;
+  type_file: string;
   score: number;
   lesson: ILesson;
   student: IStudent;
@@ -107,15 +120,15 @@ interface ITask {
   name: string;
   type: string;
   type_file: string;
-  content_url: string;
+  file: string;
   lesson: ILesson;
 }
 
-function NewActionModal({
-  isOpen,
-  setIsOpen,
-  handleAddAction,
-}: IModalProps): JSX.Element {
+interface FileProps {
+  file: File;
+}
+
+function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
   // const [teachers, setTeachers] = useState([{ id: '', name: '' }]);
   const [teachers, setTeachers] = useState<ITeacher[]>([]);
   const [selectedTeacher, setSelectedTeacher] = useState<ITeacher>();
@@ -134,33 +147,30 @@ function NewActionModal({
   const [selectedStudentTasks, setSelectedStudentTaks] =
     useState<IStudentTask>();
 
-  const [contents, setContents] = useState<ITask[]>([]);
-  const [selectedContent, setSelectedContent] = useState<ITask>();
-
   const [students, setStudents] = useState<IStudent[]>([]);
-  const [selectStudent, setSelectStudent] = useState<IStudent>();
 
   const [selectAction, setSelectAction] = useState();
   const [actions, setActions] = useState<IAction[]>([]);
   const [action, setAction] = useState<IAction>();
 
   const [selectTypeContext, setSelectTypeContext] = useState();
-  const [selectTypeContent, setSelectTypeContent] = useState();
   const [context, setContext] = useState('0');
 
-  const [selectedFile, setSelectedFile] = useState<File>();
+  const [uploadedFiles, setUploadedFiles] = useState<File>();
+
+  const formRef = useRef<FormHandles>(null);
 
   const typeContexts = [
-    { id: 1, value: 'REVISAO', label: 'Revisão' },
-    { id: 2, value: 'RECOMENDACAO', label: 'Recomendação' },
-    { id: 3, value: 'FEEDBACK', label: 'Feedback' },
+    { id: 1, name: 'REVISAO', label: 'Revisão' },
+    { id: 2, name: 'RECOMENDACAO', label: 'Recomendação' },
+    { id: 3, name: 'FEEDBACK', label: 'Feedback' },
   ];
 
   const typeActions = [
-    { id: 1, value: 'ATIVIDADE', label: 'Entregar Atividade' },
-    { id: 2, value: 'QUIZ', label: 'Entregar Quiz' },
-    { id: 3, value: 'TESTE', label: 'Entregar Teste' },
-    { id: 4, value: 'MATERIAL', label: 'Entregar Material de estudo' },
+    { name: 'ATIVIDADE', label: 'Entregar Atividade' },
+    { name: 'QUIZ', label: 'Entregar Quiz' },
+    { name: 'TESTE', label: 'Entregar Teste' },
+    { name: 'MATERIAL', label: 'Entregar Material de estudo' },
   ];
 
   const [title, setTitle] = useState({
@@ -168,15 +178,23 @@ function NewActionModal({
     label: '',
   });
 
-  const handleSubmit = useCallback(
-    async (data: ICreateActionData) => {
-      // formRef.current?.setFieldValue('select_lesson', selectedTeacher?.id);
-      await handleAddAction(data);
-      setIsOpen();
-      console.log(data);
-    },
-    [handleAddAction, setIsOpen],
-  );
+  async function handleSubmit(data: ICreateActionData) {
+    const recipeData = new FormData();
+
+    if (!uploadedFiles) {
+      throw new Error('No Image Found');
+    }
+
+    if (uploadedFiles) {
+      recipeData.append('file', uploadedFiles);
+    }
+
+    recipeData.append('task', data.task);
+    recipeData.append('category_action', data.category_action);
+    recipeData.append('deadline', data.deadline);
+    await api.post('/action', recipeData);
+    setIsOpen();
+  }
 
   function handleSelectedContext(event: ChangeEvent<HTMLSelectElement>) {
     // eslint-disable-next-line no-shadow
@@ -186,13 +204,6 @@ function NewActionModal({
 
     setContext(context);
   }
-
-  // eslint-disable-next-line no-shadow
-  // async function loadActions(context: string): Promise<void> {
-  //   const response = await api.get(`categoryAction?context=${context}`);
-
-  //   setActions(response.data.categoryActions);
-  // }
 
   useEffect(() => {
     api.get('student').then(response => {
@@ -220,12 +231,8 @@ function NewActionModal({
       description: d.description,
     }));
 
-    console.log(data);
-
     setCategoryActions(options);
   }
-
-  console.log(categoryActions);
 
   useEffect(() => {
     api.get(`subject?teacher=${selectedTeacher?.id}`).then(response => {
@@ -250,40 +257,26 @@ function NewActionModal({
     setLessons(options);
   }
 
-  console.log(selectTypeContext);
-
   useEffect(() => {
-    loadStudentTasks();
+    loadContents();
   }, [selectLesson]);
 
-  console.log(selectLesson);
-
-  async function loadStudentTasks() {
-    const res = await api.get(
-      `student_task?lesson=${selectLesson?.value}&status=${'PENDENTE'}`,
-    );
+  async function loadContents(): Promise<void> {
+    const res = await api.get(`tasks?lesson=${selectLesson?.value}`);
     const { data } = res;
 
     const options = data.map(d => ({
       value: d.id,
-      label: d.status,
+      label: d.name,
+      file: d.file,
+      type_file: d.type_file,
     }));
 
     setStudentTasks(options);
   }
 
-  useEffect(() => {
-    loadContents();
-  }, []);
-
-  async function loadContents(): Promise<void> {
-    const response = await api.get(`tasks?type=${title.name}`);
-
-    setContents(response.data);
-  }
-
   const handleUpload = file => {
-    setSelectedFile(file);
+    setUploadedFiles(file);
   };
 
   return (
@@ -293,10 +286,10 @@ function NewActionModal({
       title="Configurar Ação Programável"
       submit="add-action-button"
     >
-      <Form className=" text-sm px-6" onSubmit={handleSubmit}>
+      <Form ref={formRef} className=" text-sm px-6" onSubmit={handleSubmit}>
         <div className="flex flex-row space-x-4">
           {/* Lado esquerdo */}
-          <div className="w-5/12 space-y-2">
+          <div className="w-6/12 space-y-2">
             <Selects
               title="Bot"
               data={typeContexts}
@@ -306,7 +299,7 @@ function NewActionModal({
             />
 
             <Select2
-              name="category_action.id"
+              name="category_action"
               options={categoryActions}
               selectedOption={selectCategoryActions}
               setSelectedOption={setSelectCategoryActions}
@@ -356,7 +349,7 @@ function NewActionModal({
           </div>
 
           {/* Lado direito */}
-          <div className="w-7/12">
+          <div className="w-6/12">
             <h1 className="border-l border-r border-t p-3 rounded-t ">
               Informações
             </h1>
@@ -379,45 +372,34 @@ function NewActionModal({
                   change={setSelectSubject}
                 />
               </div>
-              {/* <div className="w-full">
-                <SelectCustomLesson
-                  title="Selecione a Aula"
-                  data={lessons}
-                  v={selectLesson}
-                  change={setSelectLesson}
-                />
-              </div> */}
 
-              <div className="flex flex-row space-x-2">
-                <div className="w-1/2">
-                  <span>Aulas</span>
-                  <Select2
-                    name="lesson"
-                    options={lessons}
-                    selectedOption={selectLesson}
-                    setSelectedOption={setSelectLesson}
-                  />
-                </div>
-                <div className="w-1/2">
-                  <span>Status</span>
-                  <Select2
-                    name="student_task.id"
-                    options={studentTasks}
-                    selectedOption={selectedStudentTasks}
-                    setSelectedOption={setSelectedStudentTaks}
-                  />
-                </div>
+              <div className="">
+                <span>Aulas</span>
+                <Select2
+                  name="lesson"
+                  options={lessons}
+                  selectedOption={selectLesson}
+                  setSelectedOption={setSelectLesson}
+                />
+              </div>
+
+              <div className="">
+                <span>Atividades</span>
+                <Select2
+                  name="task"
+                  options={studentTasks}
+                  selectedOption={selectedStudentTasks}
+                  setSelectedOption={setSelectedStudentTaks}
+                />
               </div>
 
               <div className="flex flex-col">
-                <span className="font-medium text-gray-700">
-                  Descrição da aula
-                </span>
-                <Input
+                <span className="font-medium text-gray-700">Descrição</span>
+                <textarea
                   disabled
-                  className="h-9 px-2 border rounded-lg border-gray-200 shadow-sm font-light text-gray-600
+                  className="p-2 border rounded-lg h-20 border-gray-200 shadow-sm font-light text-gray-600
     focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-sky-500"
-                  name="description"
+                  name="name"
                   value={selectLesson?.description}
                 />
               </div>
@@ -425,13 +407,7 @@ function NewActionModal({
               <div className="  space-y-2 ">
                 {context === 'REVISAO' || context === 'RECOMENDACAO' ? (
                   <>
-                    {/* <Selects
-                      title="Ação"
-                      data={typeActions}
-                      value={selectTypeContent}
-                      change={handleSelectedContent}
-                    /> */}
-
+                    {/* Julgo que o titulo poderia ser livre */}
                     <div className=" w-full">
                       <span>Ação</span>
                       <Select2
@@ -441,152 +417,29 @@ function NewActionModal({
                         setSelectedOption={setTitle}
                       />
                     </div>
-
-                    <div className="w-full">
-                      <SelectCustomContent
-                        title="Escolha o conteúdo"
-                        data={contents}
-                        v={selectedContent}
-                        change={setSelectedContent}
-                      />
-                    </div>
-                    <div className="flex flex-col items-center p-2 rounded border space-y-2 bg-gray-100">
-                      <Tooltip
-                        text="Visualizar arquivo"
-                        className="w-1/6 h-1/6"
-                      >
-                        <a
-                          className="bg-gray-500"
-                          href={selectedContent?.content_url}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          {selectedContent?.type_file === 'PDF' ? (
-                            <>
-                              <AiFillFilePdf className="text-red-600 w-full h-full" />
-                              <p className="text-gray-400 font-light text-center">
-                                {selectedContent.type_file}
-                              </p>
-                            </>
-                          ) : selectedContent?.type_file === 'DOC' ? (
-                            <>
-                              <AiFillFileText className="text-blue-600 w-full h-full" />{' '}
-                              <p className="text-gray-400 font-light text-center">
-                                {selectedContent.type_file}
-                              </p>
-                            </>
-                          ) : selectedContent?.type_file === 'IMAGE' ? (
-                            <>
-                              <AiFillFileImage className="text-green-600 w-full h-full" />
-                              <p className="text-gray-400 font-light text-center">
-                                {selectedContent.type_file}
-                              </p>
-                            </>
-                          ) : selectedContent?.type_file === 'LINK' ? (
-                            <AiOutlineLink className="text-indigo-500 w-full h-full" />
-                          ) : (
-                            <>
-                              <AiFillFileText className="text-gray-400 w-full h-full" />
-                              <p className="text-gray-400 font-light text-center">
-                                Sem conteúdo
-                              </p>
-                            </>
-                          )}
-                        </a>
-                      </Tooltip>
-                    </div>
                   </>
                 ) : (
                   <></>
                 )}
-
-                {/* {context === 'FEEDBACK' ? (
-    <div className=" space-y-2">
-      <List data={students} />
-      <button
-        className="bg-indigo-600 p-2 text-white rounded hover:bg-indigo-800"
-        type="button"
-      >
-        Atualizar Nota
-      </button>{' '}
-    </div>
-  ) : (
-    <></>
-  )} */}
-                {/* <div className="w-full">
-      <SelectCustomStudentLesson
-        title="Alunos/Aula"
-        data={studentLessons}
-        v={selectedStudentLessons}
-        change={setSelectedStudentLessons}
-      />
-    </div> */}
-
-                {/*
-    <div className=" space-y-2">
-      <List data={studentLessons} title="Aulas atribuidas" />
-      <button
-        className="bg-indigo-600 p-2 text-white rounded hover:bg-indigo-800"
-        type="button"
-      >
-        Atualizar Nota
-      </button>{' '} 
-    </div> */}
-
-                {/* {context === 'RECOMENDACAO' || context === 'REVISAO' ? (
-      <div className=" space-y-2">
-        <List data={students} />
-        <button
-          className="bg-indigo-600 p-2 text-white rounded hover:bg-indigo-800"
-          type="button"
-        >
-          Atualizar Nota
-        </button>{' '}
-      </div>
-    ) : (
-      <></>
-    )} */}
-                {/*
-    <div className="flex flex-row space-x-2">
-      <div className="">
-       <SelectStudent
-        title="Selecione o aluno"
-        data={subjectStudents}
-        value={selectStudent}
-        change={handleSelectedStudent}
-      /> 
-      </div>
-    </div>
-    */}
-                {/* {context === 'FEEDBACK' ? (
-      <SelectCustomPerson
-        seletedValue={selectedStudent}
-        setSelectedValue={setSelectedStudent}
-        data={students}
-        title="Aluno"
-      />
-    ) : (
-      <></>
-    )} */}
-                {/* <Upload onFileUploaded={setSelectedFile} /> */}
+                <Upload onFileUploaded={handleUpload} />
               </div>
             </div>
           </div>
         </div>
         <div className="w-full flex flex-row justify-end space-x-2 border-t px-6 py-2">
           <button
-            className="px-8 p-2 bg-indigo-600 hover:bg-indigo-700 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 rounded-md text-white"
-            type="submit"
-            data-testid="add-action-button"
-          >
-            <p className="text">Salvar</p>
-          </button>
-          <button
             className="px-8 p-2 bg-gray-200 hover:bg-gray-300 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 rounded-md text-white"
             type="submit"
             onClick={() => setIsOpen()}
           >
             <p className="text-gray-600">Cancelar</p>
+          </button>
+          <button
+            className="px-8 p-2 bg-indigo-600 hover:bg-indigo-700 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 rounded-md text-white"
+            type="submit"
+            data-testid="add-action-button"
+          >
+            <p className="text">Salvar</p>
           </button>
         </div>
       </Form>

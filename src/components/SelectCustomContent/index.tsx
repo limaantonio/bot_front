@@ -18,7 +18,7 @@ interface IContent {
   id: string;
   name: string;
   type: string;
-  content_url: string;
+  filet: string;
 }
 
 interface IProps {

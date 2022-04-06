@@ -15,7 +15,7 @@ interface IAction {
   deadline: number;
   passing_score: number;
   dt_complete_class: Date;
-  student_task: string;
+  task: string;
   category_action: string;
   active: boolean;
 }
@@ -30,7 +30,7 @@ function Configs(): JSX.Element {
     deadline: 0,
     passing_score: 0,
     dt_complete_class: new Date(),
-    student_task: '',
+    task: '',
     category_action: '',
     active: true,
   });
@@ -93,14 +93,14 @@ function Configs(): JSX.Element {
 
   return (
     <div className=" flex flex-col items-center h-screen  fixed w-full ">
-      <ModalEditAction
+      {/* <ModalEditAction
         isOpen={editModalOpen}
         // eslint-disable-next-line react/jsx-no-bind
         setIsOpen={toggleEditModal}
         editingAction={editingAction}
         // eslint-disable-next-line react/jsx-no-bind
         handleUpdateAction={handleUpdateAction}
-      />
+      /> */}
       <div className="flex flex-col items-left absolute  w-10/12 h-5/6 p-6  overflow-auto">
         <h1 className="font-semibold items-">Suas Configurações</h1>
 
@@ -113,7 +113,7 @@ function Configs(): JSX.Element {
           <h1 className="w-2/12 text-center">Ativar</h1>
         </div>
 
-        <div className="overflow-scroll">
+        {/* <div className="overflow-scroll">
           <div className=" rounded-md  h-full  " data-testid="actions-list">
             {actions.length ? (
               actions.map(action => (
@@ -132,7 +132,7 @@ function Configs(): JSX.Element {
               </div>
             )}
           </div>
-        </div>
+        </div> */}
         <span className="mt-8">Total: {actions.length}</span>
       </div>
     </div>

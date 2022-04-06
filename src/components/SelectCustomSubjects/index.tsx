@@ -34,7 +34,7 @@ export default function SelectCustomSubjects({
   return (
     <Listbox value={v} onChange={change}>
       {({ open }) => (
-        <div className="flex flex-row items-center ">
+        <div className="flex flex-col ">
           <Listbox.Label className="text-sm font-medium  text-gray-700 w-7/12">
             {title}
           </Listbox.Label>

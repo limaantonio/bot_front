@@ -36,7 +36,7 @@ export default function SelectCustomPerson({
   return (
     <Listbox value={v} onChange={change}>
       {({ open }) => (
-        <div className="flex flex-row items-center w-full">
+        <div className="flex flex-col">
           <Listbox.Label className="text-sm w-7/12 font-medium text-gray-700">
             {title}
           </Listbox.Label>

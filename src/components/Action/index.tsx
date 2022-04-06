@@ -12,8 +12,8 @@ interface IAction {
   deadline: number;
   passing_score: number;
   dt_complete_class: Date;
-  student_task: string;
-  category_action: string;
+  task: string;
+  content: File;
   active: boolean;
 }
 

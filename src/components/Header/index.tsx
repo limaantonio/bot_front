@@ -12,7 +12,8 @@ interface IAction {
   id: number;
   deadline: number;
   title: string;
-  student_task: string;
+  task: string;
+  file: File;
   category_action: string;
   active: boolean;
 }
@@ -30,30 +31,6 @@ function Header(): JSX.Element {
     loadactions();
   }, []);
 
-  async function handleAddAction(
-    action: Omit<IAction, 'id' | 'active'>,
-  ): Promise<void> {
-    try {
-      const newAction: IAction = {
-        id: actions[actions.length - 1]
-          ? actions[actions.length - 1].id + 1
-          : 1,
-        deadline: action.deadline,
-        title: action.title,
-        student_task: action.student_task,
-        category_action: action.category_action,
-
-        active: true,
-      };
-      console.log(newAction);
-      await api.post('/action', newAction);
-      setActions([...actions, newAction]);
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.log(err);
-    }
-  }
-
   function toggleModal(): void {
     setModalOpen(!modalOpen);
   }
@@ -64,11 +41,7 @@ function Header(): JSX.Element {
       className=" w-full flex flex-col items-center  "
     >
       <div className="flex flex-row mt-10 w-10/12 relative">
-        <NewActionModal
-          isOpen={modalOpen}
-          setIsOpen={toggleModal}
-          handleAddAction={handleAddAction}
-        />
+        <NewActionModal isOpen={modalOpen} setIsOpen={toggleModal} />
         <div style={{ zIndex: 0 }} className="absolute right-0">
           <Button openModal={toggleModal} />
         </div>

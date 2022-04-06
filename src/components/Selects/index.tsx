@@ -2,7 +2,7 @@ import React, { ChangeEvent } from 'react';
 
 interface IType {
   id: number;
-  value: string;
+  name: string;
   label: string;
 }
 
@@ -40,7 +40,7 @@ function Selects({ title, data, value, change }: IProps): JSX.Element {
           <option
             className="bg-white text-black"
             key={type.id}
-            value={type.value}
+            value={type.name}
           >
             {type.label}
           </option>
