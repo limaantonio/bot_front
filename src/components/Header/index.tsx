@@ -40,16 +40,10 @@ function Header(): JSX.Element {
       style={{ zIndex: 0 }}
       className=" w-full flex flex-col items-center  "
     >
-      <div className="flex flex-row mt-10 w-10/12 relative">
+      <div className="flex flex-row mt-10 mb-10 w-10/12 relative">
         <NewActionModal isOpen={modalOpen} setIsOpen={toggleModal} />
         <div style={{ zIndex: 0 }} className="absolute right-0">
           <Button openModal={toggleModal} />
-        </div>
-        <div
-          style={{ zIndex: 0 }}
-          className="flex flex-row items-center space-x-4"
-        >
-          <span className="text-black text-3xl">Proffy Bot</span>
         </div>
       </div>
     </header>

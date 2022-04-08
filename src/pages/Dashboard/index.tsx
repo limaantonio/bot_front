@@ -26,12 +26,6 @@ function useQuery() {
   return React.useMemo(() => new URLSearchParams(search), [search]);
 }
 
-const options = [
-  { value: 'chocolate', label: 'Chocolate' },
-  { value: 'strawberry', label: 'Strawberry' },
-  { value: 'vanilla', label: 'Vanilla' },
-];
-
 function Dashboard(): JSX.Element {
   const [isNewTrasactionModalOpen, setIsNewTrasactionModalOpen] =
     useState(false);

@@ -17,12 +17,22 @@ interface ICategoryActionProps {
 
 export function CategoryAction({ action }: ICategoryActionProps): JSX.Element {
   const [actionsNumber, setActionsNumber] = useState(0);
+  const [actionsNumberDes, setActionsNumberDes] = useState(0);
 
   useEffect(() => {
     api
       .get(`action?active=${true}&category_action_id=${action.id}`)
       .then(response => {
         setActionsNumber(response.data.total);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    api
+      .get(`action?active=${false}&category_action_id=${action.id}`)
+      .then(response => {
+        setActionsNumberDes(response.data.total);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -35,10 +45,19 @@ export function CategoryAction({ action }: ICategoryActionProps): JSX.Element {
       <h1 className="font-bold">{action.name}</h1>
       <p>{action.description}</p>
       <div className="flex flex-row relative">
-        <span>#{action.context}</span>
-        <span className="absolute right-0 font-light">
-          {actionsNumber} ações ativas
+        <span className="p-1 font-light text-xs bg-gray-200 text-gray-500 lowercase rounded">
+          #{action.context}
         </span>
+        <div className="absolute right-0 flex flex-row space-x-2">
+          <div className=" flex flex-row items-center space-x-2">
+            <div className="rounded-full h-2 w-2 bg-green-500" />
+            <span className=" font-light">{actionsNumber} ativas</span>
+          </div>
+          <div className=" flex flex-row items-center space-x-2">
+            <div className="rounded-full h-2 w-2 bg-red-500" />
+            <span className=" font-light">{actionsNumberDes} inativas</span>
+          </div>
+        </div>
       </div>
       {/* <div className="absolute right-0 top-0">
             <DropdownDetail onOpenNewTransactionModal={handleOpenNewTrasactionModalOpen}/>

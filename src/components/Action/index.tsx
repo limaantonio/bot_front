@@ -13,7 +13,7 @@ interface IAction {
   passing_score: number;
   dt_complete_class: Date;
   task: string;
-  content: File;
+  category_action: string;
   active: boolean;
 }
 
@@ -51,7 +51,7 @@ function Action({
       <div className=" bg-white text-sm p-4 flex flex-row items-center  relative border font-light h-14">
         <span className="w-3/12 text-center">{action.title}</span>
         <span className="w-2/12 text-center">{action.deadline}</span>
-        <span className="w-2/12 text-center">fdfadfsd</span>
+        <span className="w-2/12 text-center">{action.passing_score}</span>
         <span className="w-2/12 text-center">
           {format(new Date(action.dt_complete_class), 'yyyy-MM-dd')}
         </span>

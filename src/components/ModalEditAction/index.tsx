@@ -13,7 +13,6 @@ interface IAction {
   dt_complete_class: Date;
   task: string;
   category_action: string;
-  file: File;
   active: boolean;
 }
 

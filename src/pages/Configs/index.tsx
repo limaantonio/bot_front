@@ -38,19 +38,23 @@ function Configs(): JSX.Element {
 
   const { id } = useParams();
 
+  async function loadActions(): Promise<void> {
+    const response = await api.get(`action?category_action_id=${id}`);
+
+    setActions(response.data.listActions);
+  }
+
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     // eslint-disable-next-line no-shadow
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     // eslint-disable-next-line no-shadow
-    async function loadActions(id: any): Promise<void> {
-      const response = await api.get(`action?category_action_id=${id}`);
 
-      setActions(response.data.listActions);
-    }
-
-    loadActions(id);
+    loadActions();
   }, [id]);
+
+  console.log(actions);
+  console.log(id);
 
   async function handleUpdateAction(
     action: Omit<IAction, 'id' | 'active'>,
@@ -93,14 +97,14 @@ function Configs(): JSX.Element {
 
   return (
     <div className=" flex flex-col items-center h-screen  fixed w-full ">
-      {/* <ModalEditAction
+      <ModalEditAction
         isOpen={editModalOpen}
         // eslint-disable-next-line react/jsx-no-bind
         setIsOpen={toggleEditModal}
         editingAction={editingAction}
         // eslint-disable-next-line react/jsx-no-bind
         handleUpdateAction={handleUpdateAction}
-      /> */}
+      />
       <div className="flex flex-col items-left absolute  w-10/12 h-5/6 p-6  overflow-auto">
         <h1 className="font-semibold items-">Suas Configurações</h1>
 
@@ -113,7 +117,7 @@ function Configs(): JSX.Element {
           <h1 className="w-2/12 text-center">Ativar</h1>
         </div>
 
-        {/* <div className="overflow-scroll">
+        <div className="overflow-scroll">
           <div className=" rounded-md  h-full  " data-testid="actions-list">
             {actions.length ? (
               actions.map(action => (
@@ -132,7 +136,7 @@ function Configs(): JSX.Element {
               </div>
             )}
           </div>
-        </div> */}
+        </div>
         <span className="mt-8">Total: {actions.length}</span>
       </div>
     </div>

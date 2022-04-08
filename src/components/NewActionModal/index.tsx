@@ -36,6 +36,7 @@ import SelectCustomContent from '../SelectCustomContent';
 import Tooltip from '../Tooltip';
 import Select2 from '../Select2';
 import Upload from '../Upload';
+import DatePicker from '../DatePicker';
 
 interface IAction {
   id: string;
@@ -60,8 +61,10 @@ interface ICreateActionData {
   title: string;
   task: string;
   file: File;
-
+  dt_complete_class: string;
+  passing_score: string;
   category_action: string;
+  updateScore: boolean;
 }
 
 interface ICreateAction {
@@ -163,35 +166,55 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
   const typeContexts = [
     { id: 1, name: 'REVISAO', label: 'Revisão' },
     { id: 2, name: 'RECOMENDACAO', label: 'Recomendação' },
-    { id: 3, name: 'FEEDBACK', label: 'Feedback' },
+    { id: 3, name: 'MONITORAMENTO', label: 'Monitoramento' },
   ];
 
   const typeActions = [
-    { name: 'ATIVIDADE', label: 'Entregar Atividade' },
-    { name: 'QUIZ', label: 'Entregar Quiz' },
-    { name: 'TESTE', label: 'Entregar Teste' },
-    { name: 'MATERIAL', label: 'Entregar Material de estudo' },
+    { id: 1, name: 'ATIVIDADE', label: 'Entregar Atividade' },
+    { id: 2, name: 'QUIZ', label: 'Entregar Quiz' },
+    { id: 3, name: 'TESTE', label: 'Entregar Teste' },
+    { id: 4, name: 'MATERIAL', label: 'Entregar Material de estudo' },
   ];
 
-  const [title, setTitle] = useState({
-    name: '',
-    label: '',
-  });
+  const [title, setTitle] = useState('0');
+  const [selectActionTitle, setSelectActionTitle] = useState();
+
+  const [updateScore, setUpdateScore] = useState(false);
 
   async function handleSubmit(data: ICreateActionData) {
     const recipeData = new FormData();
 
     if (!uploadedFiles) {
-      throw new Error('No Image Found');
+      throw new Error('No File Found');
     }
 
     if (uploadedFiles) {
       recipeData.append('file', uploadedFiles);
     }
 
+    if (updateScore) {
+      recipeData.append('update_score', JSON.stringify(updateScore));
+    }
+
+    if (title) {
+      recipeData.append('title', title);
+    }
+
     recipeData.append('task', data.task);
+
     recipeData.append('category_action', data.category_action);
-    recipeData.append('deadline', data.deadline);
+
+    if (data.dt_complete_class) {
+      recipeData.append('dt_complete_class', data.dt_complete_class);
+    }
+    if (data.deadline) {
+      recipeData.append('deadline', data.deadline);
+    }
+
+    if (data.passing_score) {
+      recipeData.append('passing_score', data.passing_score);
+    }
+
     await api.post('/action', recipeData);
     setIsOpen();
   }
@@ -200,22 +223,8 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
     // eslint-disable-next-line no-shadow
     const context = event.target.value;
 
-    // loadActions(context);
-
     setContext(context);
   }
-
-  useEffect(() => {
-    api.get('student').then(response => {
-      setStudents(response.data);
-    });
-  }, []);
-
-  useEffect(() => {
-    api.get('teacher').then(response => {
-      setTeachers(response.data);
-    });
-  }, []);
 
   useEffect(() => {
     loadCategoryActions();
@@ -235,10 +244,23 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
   }
 
   useEffect(() => {
+    api.get('teacher').then(response => {
+      setTeachers(response.data);
+    });
+  }, []);
+
+  useEffect(() => {
     api.get(`subject?teacher=${selectedTeacher?.id}`).then(response => {
       setSubjects(response.data);
     });
   }, [selectedTeacher]);
+
+  function handleSelectedTypeActions(event: ChangeEvent<HTMLSelectElement>) {
+    // eslint-disable-next-line no-shadow
+    const title = event.target.value;
+
+    setTitle(title);
+  }
 
   useEffect(() => {
     loadLessons();
@@ -279,6 +301,12 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
     setUploadedFiles(file);
   };
 
+  function handleCheck() {
+    setUpdateScore(!updateScore);
+  }
+
+  console.log(updateScore);
+
   return (
     <Modal
       isOpen={isOpen}
@@ -286,10 +314,10 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
       title="Configurar Ação Programável"
       submit="add-action-button"
     >
-      <Form ref={formRef} className=" text-sm px-6" onSubmit={handleSubmit}>
-        <div className="flex flex-row space-x-4">
+      <Form ref={formRef} className="text-sm px-6" onSubmit={handleSubmit}>
+        <div className="flex flex-row  space-x-4">
           {/* Lado esquerdo */}
-          <div className="w-6/12 space-y-2">
+          <div className="w-6/12   space-y-2">
             <Selects
               title="Bot"
               data={typeContexts}
@@ -297,13 +325,15 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
               // eslint-disable-next-line react/jsx-no-bind
               change={handleSelectedContext}
             />
-
-            <Select2
-              name="category_action"
-              options={categoryActions}
-              selectedOption={selectCategoryActions}
-              setSelectedOption={setSelectCategoryActions}
-            />
+            <div className="">
+              <span>Contexto</span>
+              <Select2
+                name="category_action"
+                options={categoryActions}
+                selectedOption={selectCategoryActions}
+                setSelectedOption={setSelectCategoryActions}
+              />
+            </div>
 
             <div className="flex flex-col">
               <span className="font-medium text-gray-700">Descrição</span>
@@ -315,6 +345,24 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
                 value={selectCategoryActions?.description}
               />
             </div>
+
+            {context === 'MONITORAMENTO' ? (
+              <div
+                className="flex flex-row items-center space-x-2"
+                id="checkUpdate"
+              >
+                <input
+                  className="h-5 w-5"
+                  id="checkUpdate"
+                  type="checkbox"
+                  checked={updateScore}
+                  onChange={handleCheck}
+                />
+                <label>Atualizar nota?</label>
+              </div>
+            ) : (
+              <></>
+            )}
 
             {context === 'REVISAO' ? (
               <div className="flex flex-col">
@@ -331,10 +379,9 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
               <></>
             )}
 
-            <Input name="s" />
-
             {context === 'RECOMENDACAO' ||
-            selectAction === 'dd05c852-37a7-4380-b23b-89d600dea983' ? (
+            selectCategoryActions?.description ===
+              'Se nota >= ? em uma atividade x da aula invertida e não concluiu a aula invertida e se passaram ? dias' ? (
               <div className="flex flex-col">
                 <span className="font-medium text-gray-700">Qual a nota?</span>
                 <Input
@@ -349,7 +396,7 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
           </div>
 
           {/* Lado direito */}
-          <div className="w-6/12">
+          <div className="w-6/12  ">
             <h1 className="border-l border-r border-t p-3 rounded-t ">
               Informações
             </h1>
@@ -409,12 +456,12 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
                   <>
                     {/* Julgo que o titulo poderia ser livre */}
                     <div className=" w-full">
-                      <span>Ação</span>
-                      <Select2
-                        name="title"
-                        options={typeActions}
-                        selectedOption={title}
-                        setSelectedOption={setTitle}
+                      <Selects
+                        title="Ação"
+                        data={typeActions}
+                        value={title}
+                        // eslint-disable-next-line react/jsx-no-bind
+                        change={handleSelectedTypeActions}
                       />
                     </div>
                   </>
@@ -422,6 +469,20 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
                   <></>
                 )}
                 <Upload onFileUploaded={handleUpload} />
+
+                {context === 'REVISAO' || context === 'RECOMENDACAO' ? (
+                  <div className="flex flex-col">
+                    <span className="font-medium text-gray-700">
+                      Prazo de entrega da atividade
+                    </span>
+                    <DatePicker
+                      className="p-2 border rounded-lg h-10 border-gray-200 shadow-sm font-light text-gray-600"
+                      name="dt_complete_class"
+                    />
+                  </div>
+                ) : (
+                  <></>
+                )}
               </div>
             </div>
           </div>

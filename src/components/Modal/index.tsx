@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactModal from 'react-modal';
 import { AiOutlineClose } from 'react-icons/ai';
+import { relative } from 'path';
 
 interface IActionPlate {
   id: number;
