@@ -13,6 +13,7 @@ interface IAction {
   dt_complete_class: Date;
   task: string;
   category_action: string;
+  content_url: string;
   active: boolean;
 }
 
@@ -31,6 +32,7 @@ interface IActionData {
   dt_complete_class: Date;
   task: string;
   category_action: string;
+  content_url: string;
   active: boolean;
 }
 

@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import { FiEdit3, FiTrash } from 'react-icons/fi';
 import { format } from 'date-fns';
+import { AiFillFile, AiOutlineFile } from 'react-icons/ai';
+import { Link } from 'react-router-dom';
 import api from '../../services/api';
 import { Container } from './styles';
 
@@ -12,6 +14,7 @@ interface IAction {
   deadline: number;
   passing_score: number;
   dt_complete_class: Date;
+  content_url: string;
   task: string;
   category_action: string;
   active: boolean;
@@ -37,6 +40,7 @@ function Action({
       deadline: action.deadline,
       passingScore: action.passing_score,
       dtCompleteClass: action.dt_complete_class,
+      content_url: action.content_url,
       active: !isAvailable,
     });
     setIsAvailable(!isAvailable);
@@ -50,11 +54,25 @@ function Action({
     <Container active={isAvailable}>
       <div className=" bg-white text-sm p-4 flex flex-row items-center  relative border font-light h-14">
         <span className="w-3/12 text-center">{action.title}</span>
-        <span className="w-2/12 text-center">{action.deadline}</span>
+        <span className="w-2/12 text-center">
+          {format(new Date(action.deadline), 'yyyy-MM-dd')}
+        </span>
         <span className="w-2/12 text-center">{action.passing_score}</span>
         <span className="w-2/12 text-center">
           {format(new Date(action.dt_complete_class), 'yyyy-MM-dd')}
         </span>
+
+        <div className="flex flex-row justify-center item-center text-center w-2/12">
+          <a
+            target="_blank"
+            href={action.content_url}
+            className=""
+            rel="noopener noreferrer"
+          >
+            <AiOutlineFile className="h-6 w-6" />
+          </a>
+        </div>
+
         <div className="w-1/12 text-center space-x-2  flex flex-row items-center justify-center">
           <button
             type="button"

@@ -17,6 +17,7 @@ interface IAction {
   dt_complete_class: Date;
   task: string;
   category_action: string;
+  content_url: string;
   active: boolean;
 }
 
@@ -32,6 +33,7 @@ function Configs(): JSX.Element {
     dt_complete_class: new Date(),
     task: '',
     category_action: '',
+    content_url: '',
     active: true,
   });
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -109,10 +111,11 @@ function Configs(): JSX.Element {
         <h1 className="font-semibold items-">Suas Configurações</h1>
 
         <div className="bg-white flex flex-row items-center p-4 mt-10 h-14">
-          <h2 className="w-3/12 text-center">Conteúdo</h2>
-          <h1 className="w-2/12 text-center">Dias</h1>
+          <h2 className="w-3/12 text-center">Título</h2>
+          <h1 className="w-2/12 text-center">Entrega</h1>
           <h1 className="w-2/12 text-center">Nota de Corte</h1>
           <h1 className="w-2/12 text-center">Data para entrega</h1>
+          <h1 className="w-2/12 text-center">Conteúdo</h1>
           <h1 className="w-1/12 text-center">Editar</h1>
           <h1 className="w-2/12 text-center">Ativar</h1>
         </div>

@@ -25,31 +25,9 @@ function Nav(): JSX.Element {
             </span>
           </a>
         </Link> */}
-        <button
-          className=" inline-flex p-3 hover:bg-indigo-600 lg:hidden text-white ml-auto hover:text-white outline-none"
-          onClick={handleClick}
-        >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 6h16M4 12h16M4 18h16"
-            />
-          </svg>
-        </button>
+
         {/* Note that in this div we will use a ternary operator to decide whether or not to display the content of the div  */}
-        <div
-          className={`${
-            active ? '' : 'hidden'
-          }   w-full lg:inline-flex  lg:w-auto`}
-        >
+        <div>
           <div className="lg:inline-flex lg:flex-row lg:ml-auto lg:w-auto w-full lg:items-center items-start  flex flex-col lg:h-auto">
             <Link
               className="flex flex-row items-center border-b-4 border-indigo-600 hover:border-white "
@@ -72,9 +50,9 @@ function Nav(): JSX.Element {
             </Link> */}
           </div>
         </div>
-        <div className="absolute right-0">
+        {/* <div className="absolute right-0">
           <Dropdown />
-        </div>
+        </div> */}
       </div>
     </nav>
   );

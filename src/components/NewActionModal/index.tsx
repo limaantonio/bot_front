@@ -41,6 +41,8 @@ import DatePicker from '../DatePicker';
 interface IAction {
   id: string;
   deadline: number;
+  url: string;
+  type_file: string;
   title: string;
   task: string;
   file: File;
@@ -58,6 +60,8 @@ interface ILesson {
 
 interface ICreateActionData {
   deadline: string;
+  url: string;
+  type_file: string;
   title: string;
   task: string;
   file: File;
@@ -133,6 +137,13 @@ interface FileProps {
 
 function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
   // const [teachers, setTeachers] = useState([{ id: '', name: '' }]);
+
+  const [valueRadio, setValueRadio] = useState(false);
+
+  const handleChangeRadio = () => {
+    setValueRadio(!valueRadio);
+  };
+
   const [teachers, setTeachers] = useState<ITeacher[]>([]);
   const [selectedTeacher, setSelectedTeacher] = useState<ITeacher>();
 
@@ -184,9 +195,9 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
   async function handleSubmit(data: ICreateActionData) {
     const recipeData = new FormData();
 
-    if (!uploadedFiles) {
-      throw new Error('No File Found');
-    }
+    // if (!uploadedFiles) {
+    //   throw new Error('No File Found');
+    // }
 
     if (uploadedFiles) {
       recipeData.append('file', uploadedFiles);
@@ -213,6 +224,14 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
 
     if (data.passing_score) {
       recipeData.append('passing_score', data.passing_score);
+    }
+
+    if (data.url) {
+      recipeData.append('url', data.url);
+    }
+
+    if (valueRadio) {
+      recipeData.append('type_file', 'LINK');
     }
 
     await api.post('/action', recipeData);
@@ -305,8 +324,6 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
     setUpdateScore(!updateScore);
   }
 
-  console.log(updateScore);
-
   return (
     <Modal
       isOpen={isOpen}
@@ -314,8 +331,8 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
       title="Configurar Ação Programável"
       submit="add-action-button"
     >
-      <Form ref={formRef} className="text-sm px-6" onSubmit={handleSubmit}>
-        <div className="flex flex-row  space-x-4">
+      <Form ref={formRef} className="text-sm px-6 " onSubmit={handleSubmit}>
+        <div className="flex flex-row space-x-4 h-96 overflow-auto">
           {/* Lado esquerdo */}
           <div className="w-6/12   space-y-2">
             <Selects
@@ -468,7 +485,36 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
                 ) : (
                   <></>
                 )}
-                <Upload onFileUploaded={handleUpload} />
+
+                <div className="">
+                  <div className="flex flex-row space-x-2">
+                    <div className="flex flex-row items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        id="externo"
+                        checked={valueRadio}
+                        onChange={handleChangeRadio}
+                        name="type_file"
+                        value="EXTERNO"
+                      />
+                      <label>Arquivo Externo?</label>
+                    </div>
+                  </div>
+                </div>
+
+                {valueRadio === true ? (
+                  <Upload onFileUploaded={handleUpload} />
+                ) : (
+                  <div className="flex flex-col">
+                    <span className="font-medium text-gray-700">Conteúdo</span>
+                    <Input
+                      placeholder="Cole o link aqui"
+                      className="h-9 p-2 rounded-lg border border-gray-200 shadow-sm font-light text-gray-600
+    focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-sky-500"
+                      name="url"
+                    />
+                  </div>
+                )}
 
                 {context === 'REVISAO' || context === 'RECOMENDACAO' ? (
                   <div className="flex flex-col">
