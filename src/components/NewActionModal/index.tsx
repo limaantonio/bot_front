@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable camelcase */
@@ -262,6 +263,7 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
 
   useEffect(() => {
     loadCategoryActions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [context]);
 
   async function loadCategoryActions() {
@@ -298,6 +300,7 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
 
   useEffect(() => {
     loadLessons();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectSubject]);
 
   async function loadLessons() {
@@ -347,10 +350,14 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
         title="Configurar Ação Programável"
         submit="add-action-button"
       >
-        <Form ref={formRef} className="text-sm px-6 " onSubmit={handleSubmit}>
-          <div className="flex flex-row space-x-4 h-96 overflow-auto">
+        <Form
+          ref={formRef}
+          className="text-sm sm:px-6 "
+          onSubmit={handleSubmit}
+        >
+          <div className="flex sm:flex-row px-2 space-y-2 flex-col sm:space-x-4 h-96 overflow-auto">
             {/* Lado esquerdo */}
-            <div className="w-6/12   space-y-2">
+            <div className="sm:w-6/12 sm:space-y-2">
               <Selects
                 title="Bot"
                 data={typeContexts}
@@ -431,7 +438,7 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
             </div>
 
             {/* Lado direito */}
-            <div className="w-6/12  ">
+            <div className="sm:w-6/12  ">
               <h1 className="border-l border-r border-t p-3 rounded-t ">
                 Informações
               </h1>

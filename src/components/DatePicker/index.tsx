@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useRef, useState, useEffect } from 'react';
 import ReactDatePicker, { ReactDatePickerProps } from 'react-datepicker';
 import { useField } from '@unform/core';

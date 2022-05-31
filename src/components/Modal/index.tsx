@@ -52,7 +52,7 @@ function Modal({
             background: '#fff',
             color: '#000000',
             borderRadius: '8px',
-            width: '750px',
+            width: '80%',
             border: 'none',
             padding: 0,
           },
@@ -61,9 +61,9 @@ function Modal({
           },
         }}
       >
-        <div className="space-y-4">
+        <div className="space-y-4 ">
           <div className="w-full relative  flex flex-row items-center px-6 py-4 border-b">
-            <h1 className="text-xl font-bold ">{title}</h1>
+            <h1 className="sm:text-xl font-bold ">{title}</h1>
             <button type="button" onClick={() => setIsOpen()}>
               <AiOutlineClose className="absolute right-6 top-5 text-gray-500 h-5 w-5" />
             </button>

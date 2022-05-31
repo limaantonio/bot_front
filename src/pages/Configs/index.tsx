@@ -55,10 +55,8 @@ function Configs(): JSX.Element {
     // eslint-disable-next-line no-shadow
 
     loadActions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
-
-  console.log(actions);
-  console.log(id);
 
   async function handleUpdateAction(
     action: Omit<IAction, 'id' | 'active'>,

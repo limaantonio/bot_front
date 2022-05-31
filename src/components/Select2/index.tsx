@@ -9,6 +9,7 @@ interface Props extends SelectProps<OptionTypeBase> {
   name: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function Select({
   name,
   setSelectedOption,
@@ -22,6 +23,7 @@ export default function Select({
     registerField({
       name: fieldName,
       ref: selectRef.current,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       getValue: (ref: any) => {
         if (rest.isMulti) {
           if (!ref.state.value) {

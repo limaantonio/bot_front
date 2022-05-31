@@ -19,6 +19,7 @@ const SnackbarSettings = styled(ToastContainer)`
   }
 `;
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const showSnackbar = ({ type, message }) => {
   switch (type) {
     case 'success':
@@ -44,6 +45,7 @@ export const showSnackbar = ({ type, message }) => {
   }
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function Alert() {
   return <SnackbarSettings />;
 }
