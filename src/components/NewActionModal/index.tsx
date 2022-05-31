@@ -37,6 +37,7 @@ import Tooltip from '../Tooltip';
 import Select2 from '../Select2';
 import Upload from '../Upload';
 import DatePicker from '../DatePicker';
+import Alert, { showSnackbar } from '../Snackbar';
 
 interface IAction {
   id: string;
@@ -234,8 +235,22 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
       recipeData.append('type_file', 'LINK');
     }
 
-    await api.post('/action', recipeData);
-    setIsOpen();
+    try {
+      const r = await api.post('/action', recipeData).then(response => {
+        showSnackbar({
+          type: 'success',
+          message: 'Ação criada com sucesso!',
+        });
+      });
+
+      setIsOpen();
+    } catch (err) {
+      showSnackbar({
+        type: 'error',
+        message: 'Ocorreu um erro ao inserir o registro. Tente novamente.',
+      });
+      setIsOpen();
+    }
   }
 
   function handleSelectedContext(event: ChangeEvent<HTMLSelectElement>) {
@@ -325,135 +340,31 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
   }
 
   return (
-    <Modal
-      isOpen={isOpen}
-      setIsOpen={setIsOpen}
-      title="Configurar Ação Programável"
-      submit="add-action-button"
-    >
-      <Form ref={formRef} className="text-sm px-6 " onSubmit={handleSubmit}>
-        <div className="flex flex-row space-x-4 h-96 overflow-auto">
-          {/* Lado esquerdo */}
-          <div className="w-6/12   space-y-2">
-            <Selects
-              title="Bot"
-              data={typeContexts}
-              value={selectTypeContext}
-              // eslint-disable-next-line react/jsx-no-bind
-              change={handleSelectedContext}
-            />
-            <div className="">
-              <span>Contexto</span>
-              <Select2
-                name="category_action"
-                options={categoryActions}
-                selectedOption={selectCategoryActions}
-                setSelectedOption={setSelectCategoryActions}
+    <>
+      <Modal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        title="Configurar Ação Programável"
+        submit="add-action-button"
+      >
+        <Form ref={formRef} className="text-sm px-6 " onSubmit={handleSubmit}>
+          <div className="flex flex-row space-x-4 h-96 overflow-auto">
+            {/* Lado esquerdo */}
+            <div className="w-6/12   space-y-2">
+              <Selects
+                title="Bot"
+                data={typeContexts}
+                value={selectTypeContext}
+                // eslint-disable-next-line react/jsx-no-bind
+                change={handleSelectedContext}
               />
-            </div>
-
-            <div className="flex flex-col">
-              <span className="font-medium text-gray-700">Descrição</span>
-              <textarea
-                disabled
-                className="p-2 border rounded-lg h-20 border-gray-200 shadow-sm font-light text-gray-600
-    focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-sky-500"
-                name="name"
-                value={selectCategoryActions?.description}
-              />
-            </div>
-
-            {context === 'MONITORAMENTO' ? (
-              <div
-                className="flex flex-row items-center space-x-2"
-                id="checkUpdate"
-              >
-                <input
-                  className="h-5 w-5"
-                  id="checkUpdate"
-                  type="checkbox"
-                  checked={updateScore}
-                  onChange={handleCheck}
-                />
-                <label>Atualizar nota?</label>
-              </div>
-            ) : (
-              <></>
-            )}
-
-            {context === 'REVISAO' ? (
-              <div className="flex flex-col">
-                <span className="font-medium text-gray-700">
-                  Quantidade de dias
-                </span>
-                <Input
-                  className="h-9 p-2 rounded-lg border border-gray-200 shadow-sm font-light text-gray-600
-    focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-sky-500"
-                  name="deadline"
-                />
-              </div>
-            ) : (
-              <></>
-            )}
-
-            {context === 'RECOMENDACAO' ||
-            selectCategoryActions?.description ===
-              'Se nota >= ? em uma atividade x da aula invertida e não concluiu a aula invertida e se passaram ? dias' ? (
-              <div className="flex flex-col">
-                <span className="font-medium text-gray-700">Qual a nota?</span>
-                <Input
-                  className="h-9 p-2 rounded-lg border border-gray-200 shadow-sm font-light text-gray-600
-    focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-sky-500"
-                  name="passing_score"
-                />
-              </div>
-            ) : (
-              <></>
-            )}
-          </div>
-
-          {/* Lado direito */}
-          <div className="w-6/12  ">
-            <h1 className="border-l border-r border-t p-3 rounded-t ">
-              Informações
-            </h1>
-            <div className="border p-3 space-y-2 rounded-b ">
-              {/* correto */}
-              <div className="w-full">
-                <SelectCustomPerson
-                  title="Professor"
-                  data={teachers}
-                  v={selectedTeacher}
-                  change={setSelectedTeacher}
-                />
-              </div>
-
-              <div className="w-full">
-                <SelectCustomSubjects
-                  title="Disciplinas/Turma"
-                  data={subjects}
-                  v={selectSubject}
-                  change={setSelectSubject}
-                />
-              </div>
-
               <div className="">
-                <span>Aulas</span>
+                <span>Contexto</span>
                 <Select2
-                  name="lesson"
-                  options={lessons}
-                  selectedOption={selectLesson}
-                  setSelectedOption={setSelectLesson}
-                />
-              </div>
-
-              <div className="">
-                <span>Atividades</span>
-                <Select2
-                  name="task"
-                  options={studentTasks}
-                  selectedOption={selectedStudentTasks}
-                  setSelectedOption={setSelectedStudentTaks}
+                  name="category_action"
+                  options={categoryActions}
+                  selectedOption={selectCategoryActions}
+                  setSelectedOption={setSelectCategoryActions}
                 />
               </div>
 
@@ -464,93 +375,211 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
                   className="p-2 border rounded-lg h-20 border-gray-200 shadow-sm font-light text-gray-600
     focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-sky-500"
                   name="name"
-                  value={selectLesson?.description}
+                  value={selectCategoryActions?.description}
                 />
               </div>
 
-              <div className="  space-y-2 ">
-                {context === 'REVISAO' || context === 'RECOMENDACAO' ? (
-                  <>
-                    {/* Julgo que o titulo poderia ser livre */}
-                    <div className=" w-full">
-                      <Selects
-                        title="Ação"
-                        data={typeActions}
-                        value={title}
-                        // eslint-disable-next-line react/jsx-no-bind
-                        change={handleSelectedTypeActions}
-                      />
-                    </div>
-                  </>
-                ) : (
-                  <></>
-                )}
+              {context === 'MONITORAMENTO' ? (
+                <div
+                  className="flex flex-row items-center space-x-2"
+                  id="checkUpdate"
+                >
+                  <input
+                    className="h-5 w-5"
+                    id="checkUpdate"
+                    type="checkbox"
+                    checked={updateScore}
+                    onChange={handleCheck}
+                  />
+                  <label>Atualizar nota?</label>
+                </div>
+              ) : (
+                <></>
+              )}
 
-                <div className="">
-                  <div className="flex flex-row space-x-2">
-                    <div className="flex flex-row items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        id="externo"
-                        checked={valueRadio}
-                        onChange={handleChangeRadio}
-                        name="type_file"
-                        value="EXTERNO"
-                      />
-                      <label>Arquivo Externo?</label>
-                    </div>
-                  </div>
+              {context === 'REVISAO' ? (
+                <div className="flex flex-col">
+                  <span className="font-medium text-gray-700">
+                    Quantidade de dias
+                  </span>
+                  <Input
+                    className="h-9 p-2 rounded-lg border border-gray-200 shadow-sm font-light text-gray-600
+    focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-sky-500"
+                    name="deadline"
+                  />
+                </div>
+              ) : (
+                <></>
+              )}
+
+              {context === 'RECOMENDACAO' ||
+              selectCategoryActions?.description ===
+                'Se nota >= ? em uma atividade x da aula invertida e não concluiu a aula invertida e se passaram pelo menos ? dias da data de entrega.' ? (
+                <div className="flex flex-col">
+                  <span className="font-medium text-gray-700">
+                    Qual a nota?
+                  </span>
+                  <Input
+                    className="h-9 p-2 rounded-lg border border-gray-200 shadow-sm font-light text-gray-600
+    focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-sky-500"
+                    name="passing_score"
+                  />
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
+
+            {/* Lado direito */}
+            <div className="w-6/12  ">
+              <h1 className="border-l border-r border-t p-3 rounded-t ">
+                Informações
+              </h1>
+              <div className="border p-3 space-y-2 rounded-b ">
+                {/* correto */}
+                <div className="w-full">
+                  <SelectCustomPerson
+                    title="Professor"
+                    data={teachers}
+                    v={selectedTeacher}
+                    change={setSelectedTeacher}
+                  />
                 </div>
 
-                {valueRadio === true ? (
-                  <Upload onFileUploaded={handleUpload} />
-                ) : (
-                  <div className="flex flex-col">
-                    <span className="font-medium text-gray-700">Conteúdo</span>
-                    <Input
-                      placeholder="Cole o link aqui"
-                      className="h-9 p-2 rounded-lg border border-gray-200 shadow-sm font-light text-gray-600
-    focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-sky-500"
-                      name="url"
-                    />
-                  </div>
-                )}
+                <div className="w-full">
+                  <SelectCustomSubjects
+                    title="Disciplinas/Turma"
+                    data={subjects}
+                    v={selectSubject}
+                    change={setSelectSubject}
+                  />
+                </div>
 
-                {context === 'REVISAO' || context === 'RECOMENDACAO' ? (
-                  <div className="flex flex-col">
-                    <span className="font-medium text-gray-700">
-                      Prazo de entrega da atividade
-                    </span>
-                    <DatePicker
-                      className="p-2 border rounded-lg h-10 border-gray-200 shadow-sm font-light text-gray-600"
-                      name="dt_complete_class"
-                    />
-                  </div>
-                ) : (
-                  <></>
-                )}
+                <div className="">
+                  <span>Aulas</span>
+                  <Select2
+                    name="lesson"
+                    options={lessons}
+                    selectedOption={selectLesson}
+                    setSelectedOption={setSelectLesson}
+                  />
+                </div>
+
+                <div className="">
+                  <span>Atividades</span>
+                  <Select2
+                    name="task"
+                    options={studentTasks}
+                    selectedOption={selectedStudentTasks}
+                    setSelectedOption={setSelectedStudentTaks}
+                  />
+                </div>
+
+                <div className="flex flex-col">
+                  <span className="font-medium text-gray-700">Descrição</span>
+                  <textarea
+                    disabled
+                    className="p-2 border rounded-lg h-20 border-gray-200 shadow-sm font-light text-gray-600
+    focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-sky-500"
+                    name="name"
+                    value={selectLesson?.description}
+                  />
+                </div>
+
+                <div className="  space-y-2 ">
+                  {context === 'REVISAO' || context === 'RECOMENDACAO' ? (
+                    <>
+                      {/* Julgo que o titulo poderia ser livre */}
+                      <div className=" w-full">
+                        <Selects
+                          title="Ação"
+                          data={typeActions}
+                          value={title}
+                          // eslint-disable-next-line react/jsx-no-bind
+                          change={handleSelectedTypeActions}
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+
+                  {context === 'MONITORAMENTO' ? (
+                    <></>
+                  ) : (
+                    <div className="">
+                      <div className="flex flex-row space-x-2">
+                        <div className="flex flex-row items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            id="externo"
+                            checked={valueRadio}
+                            onChange={handleChangeRadio}
+                            name="type_file"
+                            value="EXTERNO"
+                          />
+                          <label>Arquivo Externo?</label>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {context === 'MONITORAMENTO' ? (
+                    <></>
+                  ) : valueRadio === true ? (
+                    <Upload onFileUploaded={handleUpload} />
+                  ) : (
+                    <div className="flex flex-col">
+                      <span className="font-medium text-gray-700">
+                        Conteúdo
+                      </span>
+                      <Input
+                        placeholder="Cole o link aqui"
+                        className="h-9 p-2 rounded-lg border border-gray-200 shadow-sm font-light text-gray-600
+    focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-sky-500"
+                        name="url"
+                      />
+                    </div>
+                  )}
+
+                  {context === 'REVISAO' || context === 'RECOMENDACAO' ? (
+                    <div className="flex flex-col">
+                      <span className="font-medium text-gray-700">
+                        Prazo de entrega da atividade
+                      </span>
+                      <DatePicker
+                        className="p-2 border rounded-lg h-10 border-gray-200 shadow-sm font-light text-gray-600"
+                        name="dt_complete_class"
+                      />
+                    </div>
+                  ) : (
+                    <></>
+                  )}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="w-full flex flex-row justify-end space-x-2 border-t px-6 py-2">
-          <button
-            className="px-8 p-2 bg-gray-200 hover:bg-gray-300 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 rounded-md text-white"
-            type="submit"
-            onClick={() => setIsOpen()}
-          >
-            <p className="text-gray-600">Cancelar</p>
-          </button>
-          <button
-            className="px-8 p-2 bg-indigo-600 hover:bg-indigo-700 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 rounded-md text-white"
-            type="submit"
-            data-testid="add-action-button"
-          >
-            <p className="text">Salvar</p>
-          </button>
-        </div>
-      </Form>
-    </Modal>
+          <div className="w-full flex flex-row justify-end space-x-2 border-t px-6 py-2">
+            <button
+              className="px-8 p-2 bg-gray-200 hover:bg-gray-300 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 rounded-md text-white"
+              type="submit"
+              onClick={() => setIsOpen()}
+            >
+              <p className="text-gray-600">Cancelar</p>
+            </button>
+
+            <button
+              className="px-8 p-2 bg-indigo-600 hover:bg-indigo-700 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 rounded-md text-white"
+              type="submit"
+              data-testid="add-action-button"
+            >
+              <p className="text">Salvar</p>
+            </button>
+          </div>
+        </Form>
+      </Modal>
+      <Alert />
+    </>
   );
 }
 

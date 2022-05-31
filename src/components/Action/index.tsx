@@ -3,10 +3,12 @@
 import React, { useState } from 'react';
 import { FiEdit3, FiTrash } from 'react-icons/fi';
 import { format } from 'date-fns';
-import { AiFillFile, AiOutlineFile } from 'react-icons/ai';
+import { AiFillFile, AiOutlineFile, AiOutlineInfoCircle } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
+import { BiCloudDownload } from 'react-icons/bi';
 import api from '../../services/api';
 import { Container } from './styles';
+import Tooltip from '../Tooltip';
 
 interface IAction {
   id: number;
@@ -54,6 +56,7 @@ function Action({
     <Container active={isAvailable}>
       <div className=" bg-white text-sm p-4 flex flex-row items-center  relative border font-light h-14">
         <span className="w-3/12 text-center">{action.title}</span>
+
         <span className="w-2/12 text-center">
           {format(new Date(action.deadline), 'yyyy-MM-dd')}
         </span>
@@ -69,7 +72,7 @@ function Action({
             className=""
             rel="noopener noreferrer"
           >
-            <AiOutlineFile className="h-6 w-6" />
+            <BiCloudDownload className="h-6 w-6" />
           </a>
         </div>
 

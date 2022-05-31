@@ -3,10 +3,12 @@
 /* eslint-disable jsx-a11y/heading-has-content */
 /* eslint-disable react/jsx-no-comment-textnodes */
 import React, { useEffect, useState } from 'react';
+import { AiOutlineInfoCircle } from 'react-icons/ai';
 import { BsArrowLeftShort } from 'react-icons/bs';
 import { Link, useHistory, useLocation, useParams } from 'react-router-dom';
 import Action from '../../components/Action';
 import ModalEditAction from '../../components/ModalEditAction';
+import Tooltip from '../../components/Tooltip';
 import api from '../../services/api';
 
 interface IAction {
@@ -112,7 +114,15 @@ function Configs(): JSX.Element {
 
         <div className="bg-white flex flex-row items-center p-4 mt-10 h-14">
           <h2 className="w-3/12 text-center">Título</h2>
-          <h1 className="w-2/12 text-center">Entrega</h1>
+          <div>
+            <Tooltip
+              text="Qtde. de dias após a conclusão da tarefa"
+              className="w-1/6 h-1/6"
+            >
+              <AiOutlineInfoCircle />
+            </Tooltip>
+          </div>
+          <h1 className="w-2/12 text-center">Qtde. dias</h1>
           <h1 className="w-2/12 text-center">Nota de Corte</h1>
           <h1 className="w-2/12 text-center">Data para entrega</h1>
           <h1 className="w-2/12 text-center">Conteúdo</h1>
