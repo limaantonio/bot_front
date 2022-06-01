@@ -75,7 +75,7 @@ function Action({
             <BiCloudDownload className="h-6 w-6" />
           </a>
         </div>
-
+        {/* 
         <div className="w-1/12 text-center space-x-2  flex flex-row items-center justify-center">
           <button
             type="button"
@@ -85,7 +85,7 @@ function Action({
           >
             <FiEdit3 size={20} />
           </button>
-        </div>
+        </div> */}
         <div className="w-2/12 text-center space-x-2  flex flex-row items-center justify-center">
           <section className="footer ">
             <div className="availability-container flex flex-row items-center space-x-2">

@@ -14,9 +14,9 @@ export const Container = styled.div<IActionPlateProps>`
       .switch {
         position: relative;
         display: inline-block;
-        width: 88px;
-        height: 32px;
-        margin-left: 12px;
+        width: 3.4rem;
+        height: 1.3rem;
+        margin-left: 1rem;
 
         & input {
           opacity: 0;
@@ -39,9 +39,9 @@ export const Container = styled.div<IActionPlateProps>`
           &:before {
             position: absolute;
             content: '';
-            height: 20px;
-            width: 40px;
-            left: 8px;
+            height: 0.6rem;
+            width: 1rem;
+            left: 2px;
             bottom: 6px;
             background-color: white;
             -webkit-transition: 0.4s;

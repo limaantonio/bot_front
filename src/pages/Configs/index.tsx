@@ -98,7 +98,7 @@ function Configs(): JSX.Element {
   }
 
   return (
-    <div className=" flex flex-col items-center h-screen  fixed w-full ">
+    <div className=" flex flex-col sm:items-center h-screen  fixed w-full ">
       <ModalEditAction
         isOpen={editModalOpen}
         // eslint-disable-next-line react/jsx-no-bind
@@ -107,24 +107,25 @@ function Configs(): JSX.Element {
         // eslint-disable-next-line react/jsx-no-bind
         handleUpdateAction={handleUpdateAction}
       />
-      <div className="flex flex-col items-left absolute  w-10/12 h-5/6 p-6  overflow-auto">
+      <div className="flex flex-col items-left absolute w-full  sm:w-10/12 h-5/6 sm:p-6 p-2 overflow-auto">
         <h1 className="font-semibold items-">Suas Configurações</h1>
 
         <div className="bg-white flex flex-row items-center p-4 mt-10 h-14">
           <h2 className="w-3/12 text-center">Título</h2>
-          <div>
+          <div className="w-2/12 text-center space-x-2 flex flex-row items-center justify-center">
             <Tooltip
               text="Qtde. de dias após a conclusão da tarefa"
               className="w-1/6 h-1/6"
             >
               <AiOutlineInfoCircle />
             </Tooltip>
+            <h1 className="">Dias</h1>
           </div>
-          <h1 className="w-2/12 text-center">Qtde. dias</h1>
-          <h1 className="w-2/12 text-center">Nota de Corte</h1>
-          <h1 className="w-2/12 text-center">Data para entrega</h1>
+
+          <h1 className="w-2/12 text-center">Nota</h1>
+          <h1 className="w-2/12 text-center">Entrega</h1>
           <h1 className="w-2/12 text-center">Conteúdo</h1>
-          <h1 className="w-1/12 text-center">Editar</h1>
+          {/* <h1 className="w-1/12 text-center">Editar</h1> */}
           <h1 className="w-2/12 text-center">Ativar</h1>
         </div>
 
