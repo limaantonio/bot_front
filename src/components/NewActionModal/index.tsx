@@ -232,9 +232,11 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
       recipeData.append('url', data.url);
     }
 
-    if (valueRadio) {
+    if (!valueRadio) {
       recipeData.append('type_file', 'LINK');
     }
+
+    console.log(data);
 
     try {
       const r = await api.post('/action', recipeData).then(response => {
