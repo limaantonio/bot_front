@@ -187,6 +187,7 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
     { id: 2, name: 'QUIZ', label: 'Entregar Quiz' },
     { id: 3, name: 'TESTE', label: 'Entregar Teste' },
     { id: 4, name: 'MATERIAL', label: 'Entregar Material de estudo' },
+    { id: 5, name: 'DIAGNOSIS', label: 'Entregar Intrumento para diagnóstico' },
   ];
 
   const [title, setTitle] = useState('0');
@@ -235,8 +236,6 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
     if (!valueRadio) {
       recipeData.append('type_file', 'LINK');
     }
-
-    console.log(data);
 
     try {
       const r = await api.post('/action', recipeData).then(response => {
