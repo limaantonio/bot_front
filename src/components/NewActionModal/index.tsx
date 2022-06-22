@@ -187,7 +187,11 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
     { id: 2, name: 'QUIZ', label: 'Entregar Quiz' },
     { id: 3, name: 'TESTE', label: 'Entregar Teste' },
     { id: 4, name: 'MATERIAL', label: 'Entregar Material de estudo' },
-    { id: 5, name: 'DIAGNOSIS', label: 'Entregar Intrumento para diagnóstico' },
+    {
+      id: 5,
+      name: 'DIAGNOSIS',
+      label: 'Entregar Instrumento para diagnóstico',
+    },
     { id: 6, name: 'ATUALIZAR_NOTA', label: 'Atualizar nota' },
   ];
 
