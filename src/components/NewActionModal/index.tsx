@@ -188,6 +188,7 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
     { id: 3, name: 'TESTE', label: 'Entregar Teste' },
     { id: 4, name: 'MATERIAL', label: 'Entregar Material de estudo' },
     { id: 5, name: 'DIAGNOSIS', label: 'Entregar Intrumento para diagnóstico' },
+    { id: 6, name: 'ATUALIZAR_NOTA', label: 'Atualizar nota' },
   ];
 
   const [title, setTitle] = useState('0');
@@ -206,8 +207,12 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
       recipeData.append('file', uploadedFiles);
     }
 
-    if (updateScore) {
-      recipeData.append('update_score', JSON.stringify(updateScore));
+    // if (updateScore) {
+    //   recipeData.append('update_score', JSON.stringify(updateScore));
+    // }
+
+    if (title === 'ATUALIZAR_NOTA') {
+      recipeData.append('update_score', JSON.stringify(true));
     }
 
     if (title) {
@@ -387,7 +392,7 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
                 />
               </div>
 
-              {context === 'MONITORAMENTO' ? (
+              {/* {context === 'MONITORAMENTO' ? (
                 <div
                   className="flex flex-row items-center space-x-2"
                   id="checkUpdate"
@@ -403,7 +408,7 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
                 </div>
               ) : (
                 <></>
-              )}
+              )} */}
 
               {context === 'REVISAO' ? (
                 <div className="flex flex-col">
@@ -495,7 +500,9 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
                 </div>
 
                 <div className="  space-y-2 ">
-                  {context === 'REVISAO' || context === 'RECOMENDACAO' ? (
+                  {context === 'REVISAO' ||
+                  context === 'RECOMENDACAO' ||
+                  context === 'MONITORAMENTO' ? (
                     <>
                       {/* Julgo que o titulo poderia ser livre */}
                       <div className=" w-full">
