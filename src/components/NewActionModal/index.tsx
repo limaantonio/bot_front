@@ -66,6 +66,7 @@ interface ICreateActionData {
   type_file: string;
   title: string;
   task: string;
+  lesson: string;
   file: File;
   dt_complete_class: string;
   passing_score: string;
@@ -226,6 +227,8 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
     recipeData.append('task', data.task);
 
     recipeData.append('category_action', data.category_action);
+
+    recipeData.append('lesson', data.lesson);
 
     if (data.dt_complete_class) {
       recipeData.append('dt_complete_class', data.dt_complete_class);
@@ -481,16 +484,20 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
                     setSelectedOption={setSelectLesson}
                   />
                 </div>
-
-                <div className="">
-                  <span>Atividades</span>
-                  <Select2
-                    name="task"
-                    options={studentTasks}
-                    selectedOption={selectedStudentTasks}
-                    setSelectedOption={setSelectedStudentTaks}
-                  />
-                </div>
+                {selectCategoryActions?.description !==
+                'O aluno finalizou uma atividade especifica de uma aula invertida a no minimo X dias.' ? (
+                  <div className="">
+                    <span>Atividades</span>
+                    <Select2
+                      name="task"
+                      options={studentTasks}
+                      selectedOption={selectedStudentTasks}
+                      setSelectedOption={setSelectedStudentTaks}
+                    />
+                  </div>
+                ) : (
+                  <></>
+                )}
 
                 <div className="flex flex-col">
                   <span className="font-medium text-gray-700">Descrição</span>
