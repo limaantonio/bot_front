@@ -224,8 +224,9 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
       recipeData.append('title', title);
     }
 
-    recipeData.append('task', data.task);
-
+    if (data.task) {
+      recipeData.append('task', data.task);
+    }
     recipeData.append('category_action', data.category_action);
 
     recipeData.append('lesson', data.lesson);
