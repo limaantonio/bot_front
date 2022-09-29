@@ -486,7 +486,7 @@ function NewActionModal({ isOpen, setIsOpen }: IModalProps): JSX.Element {
                   />
                 </div>
                 {selectCategoryActions?.description !==
-                'O aluno finalizou uma atividade especifica de uma aula invertida a no minimo X dias.' ? (
+                'O aluno finalizou uma aula invertida a no minimo X dias.' ? (
                   <div className="">
                     <span>Atividades</span>
                     <Select2
